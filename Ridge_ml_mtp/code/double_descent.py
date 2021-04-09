@@ -16,7 +16,7 @@ save_fig = True
 def generate_data(n, p, sigma=.5):
     np.random.seed(seed)
     rng = np.random.default_rng(seed)
-    beta = np.random.choice([-1., 0., 1.], p, p=[.3, .6, .1])
+    beta = np.random.choice([-1., 0., 1.], p)
     beta /= np.linalg.norm(beta, 2)  # normed parameters
     X = rng.multivariate_normal([0], np.eye(1), (n, p)).reshape(n, p)
     noise = rng.multivariate_normal([0], sigma**2 * np.eye(1), (n)).reshape(n)
@@ -28,11 +28,11 @@ def new_ridge(n, n_max, p, sigma, ridge=1e-7):
     X, y, _, _ = generate_data(n_max, p, sigma)
     train_reps = []
     test_reps = []
-    print(n, n_max, p, ridge, X.shape, y.shape)
+    X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                        train_size=n,
+                                                        random_state=seed)
+    print(n, n_max, p, ridge, X_test.shape, y_test.shape)
     for _ in range(10):
-        X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                            train_size=n,
-                                                            random_state=seed)
         clf = Ridge(alpha=ridge)
         clf.fit(X_train, y_train)
         train_error = mean_squared_error(y_train, clf.predict(X_train))
@@ -54,7 +54,7 @@ def make_curve(n_samp, n_max, p, sigma, ridge=1e-7):
 
 def double_descent(n_max, p, sigma):
     ridge_opt = p * sigma ** 2
-    n_samples = np.linspace(3, n_max-10, num=30, dtype=np.int)
+    n_samples = np.linspace(3, n_max // 2, num=30, dtype=int)
     ridges = [1e-6, 1e-3, 1e-2, 1e-1]
     ridges = np.hstack((ridges, np.array([1])))
     all_train = []
@@ -81,4 +81,4 @@ def double_descent(n_max, p, sigma):
 
 
 if __name__ == '__main__':
-    double_descent(500, 200, .2)
+    double_descent(1000, 200, .2)
