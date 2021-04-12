@@ -118,9 +118,12 @@
 truc
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%
+% Presentation
+%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Linear model}
-\begin{frame}{Ridge egularization}{Why use it?}
+\begin{frame}{Ridge regularization}{Why use it?}
     Ordinary least squares:
     \[\hat\beta = \argmin_{\beta} \|y-X\beta\|_2^2 \Longleftrightarrow \hat \beta = (X^\top X)^{-1}X^\top y\]
 
@@ -147,12 +150,66 @@ truc
 \end{frame}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%
+% double descent
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Double descent}{Over parametrization}
+    Phenomenon observed in Deep Learning, Random Forests \dots
+    \begin{onlyenv}<1>
+        \begin{figure}
+            \centering
+            \includegraphics[scale=.6]{under_overfit_curves.pdf}
+        \end{figure}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{figure}
+            \centering
+            \includegraphics[scale=.6]{scheme_doubledescent.pdf}
+        \end{figure}
+    \begin{itemize}
+        \item interpolate the data $\Longrightarrow$ $\ell_2$ norm of $\hat\beta$ is high,
+        \item smaller $\ell_2$ norm for $\hat\beta$ generalize better and we keep zero training error.
+    \end{itemize}
+    \end{onlyenv}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% double descent with samples
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}{Double descent}{With samples \citep{nakkiran2020optimal}}
+    In some cases ridge regularization can help get a monotonous error curve.
+    \begin{columns}
+        \begin{column}{0.46\textwidth}
+            \begin{itemize}
+                \item Isotropic data: $X\sim\mathcal{N}(O,\mathrm{Id})$,
+                \item[]
+                \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
+                \item[]
+                \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
+                \item $\lambda_{opt} = \sigma^2p$
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.7\textwidth}
+            \begin{center}
+             \includegraphics[width=1\textwidth]{double_descent.pdf}
+             \end{center}
+        \end{column}
+        \end{columns}
+    \begin{onlyenv}<2>
+        \begin{block}{}
+        We can achieve monotonic test error decrease with ridge regularization varying $p$ or $n$ for the linear models with isotropic covariates.
+        \end{block}
+    \end{onlyenv}
+\end{frame}
+
 %%%%%%%%%%%%%%%%%
 % Biblio
 %%%%%%%%%%%%%%%%%
 
 \begin{frame}
-    \bibliography{../references.bib}
+    \bibliography{../sty/references.bib}
 
 \end{frame}
 
