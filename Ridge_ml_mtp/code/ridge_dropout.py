@@ -20,52 +20,53 @@ save_fig = True
 
 def generate_data(n, p):
     np.random.seed(seed)
-    X, y, beta = make_regression(n, p, random_state=seed, coef=True)
+    X, y, beta = make_regression(n, p, random_state=seed, coef=True, noise=1)
+    X_ = np.copy(X)
     X -= np.mean(X, 0)
     X /= np.linalg.norm(X, axis=0)
     X = torch.from_numpy(X).requires_grad_().float()
     y = torch.from_numpy(y).float()
     beta = torch.from_numpy(beta).float()
-    return X, y, beta
+    return X, y, beta, X_
 
 
 class LinearReg(nn.Module):
     def __init__(self, p, phi):
         super(LinearReg, self).__init__()
         self.linear = torch.nn.Linear(p, 1)
-        self.dropout = nn.Dropout(phi)
+        self.d = nn.Dropout(phi)
 
     def forward(self, x):
-        out = self.dropout(self.linear(x))
+        out = self.d(self.linear(x))
         return out
 
 
 def new_ridge(n, p, phi):
-    X, y, _ = generate_data(n, p)
+    X, y, _, _ = generate_data(n, p)
     X = X.detach().numpy()
     y = y.numpy()
     ridge = phi / (1 - phi)
     X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                         test_size=.3,
                                                         random_state=seed)
-    clf = Ridge(alpha=ridge)
+    clf = Ridge(alpha=ridge, tol=1e-10, solver='lsqr')
     clf.fit(X_train, y_train)
     train_error = mean_squared_error(y_train, clf.predict(X_train))
     test_error = mean_squared_error(y_test, clf.predict(X_test))
     print(f"Ridge test error = {test_error}")
-    return train_error, test_error, clf.coef_
+    return train_error, test_error, clf
 
 
-def withtorch(n, p, phi, n_epoch):
-    X, y, _ = generate_data(n, p)
+def withtorch(n, p, phi, n_epoch, lr):
+    X, y, _, _ = generate_data(n, p)
     X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                         test_size=.3,
                                                         random_state=seed)
     linearmodel = LinearReg(p, phi)
-    optim = torch.optim.SGD(linearmodel.parameters(), lr=2e-4)
+    optim = torch.optim.SGD(linearmodel.parameters(), lr=lr)
     loss = F.mse_loss
     train_ds = TensorDataset(X_train, y_train.requires_grad_())
-    train_dl = DataLoader(train_ds, shuffle=True)
+    train_dl = DataLoader(train_ds, 100, shuffle=True)
     for epoch in range(n_epoch):
         for xb, yb in train_dl:
             optim.zero_grad()
@@ -84,30 +85,30 @@ def withtorch(n, p, phi, n_epoch):
                 val_test = loss(test_pred, y_test.view(y_test.size(0), -1))
             linearmodel.train()
             print(f'~ test loss {val_test:.3f}')
-    return val_loss.detach(), val_test, linearmodel.linear.weight[0]
+    return val_loss.detach(), val_test, linearmodel
 
 
-def make_curve(n, p, phi, n_epoch):
-    _, _, beta_ridge = new_ridge(n, p, phi)
-    _, _, beta_nn = withtorch(n, p, phi, n_epoch)
-    return beta_ridge, beta_nn
+def make_curve(n, p, phi, n_epoch, lr):
+    _, _, model_ridge = new_ridge(n, p, phi)
+    _, _, model_nn = withtorch(n, p, phi, n_epoch, lr)
+    return model_ridge, model_nn
 
 
-def plot_coefs(n, p, phi, n_epoch):
-    beta_ridge, beta_nn = make_curve(n, p, phi, n_epoch)
-    beta_nn = beta_nn.detach().numpy()
-    print(beta_nn)
-    print(beta_ridge)
+def plot_coefs(n, p, phi, n_epoch, lr):
+    ridge, neural = make_curve(n, p, phi, n_epoch, lr)
     plt.figure()
-    plt.plot(beta_ridge, label="ridge")
-    plt.plot(beta_nn, label='dropout', marker="*")
+    plt.plot(ridge.coef_, label="ridge")
+    plt.plot(neural.linear.weight[0].detach().numpy(),
+             marker="*", label="dropout")
     plt.legend()
     plt.tight_layout()
     if save_fig:
         plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
                                  "dropout.pdf"))
     plt.show()
+    return ridge, nn
 
 
 if __name__ == "__main__":
-    plot_coefs(500, 20, .2, 5000)
+    n, p, phi, n_epoch, lr = 500, 20, .7, 26000, 1e-3
+    ridge, neural = plot_coefs(n, p, phi, n_epoch, lr)
