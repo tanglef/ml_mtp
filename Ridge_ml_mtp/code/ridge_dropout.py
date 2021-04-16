@@ -4,7 +4,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 from sklearn.datasets import make_regression
 import torch
-from torch.utils.data import TensorDataset, DataLoader
 import torch.nn as nn
 import torch.nn.functional as F
 import matplotlib.pyplot as plt
@@ -37,7 +36,8 @@ class LinearReg(nn.Module):
         self.d = nn.Dropout(phi)
 
     def forward(self, x):
-        out = self.d(self.linear(x))
+        out = self.d(x)
+        out = self.linear(out)
         return out
 
 
@@ -65,26 +65,28 @@ def withtorch(n, p, phi, n_epoch, lr):
     linearmodel = LinearReg(p, phi)
     optim = torch.optim.SGD(linearmodel.parameters(), lr=lr)
     loss = F.mse_loss
-    train_ds = TensorDataset(X_train, y_train.requires_grad_())
-    train_dl = DataLoader(train_ds, 100, shuffle=True)
+    prev_train_loss = 1e8
     for epoch in range(n_epoch):
-        for xb, yb in train_dl:
-            optim.zero_grad()
-            preds = linearmodel(xb)
-            val_loss = loss(preds, yb.view(yb.size(0), -1))
-            val_loss.backward(retain_graph=True)
-            optim.step()
+        optim.zero_grad()
+        preds = linearmodel(X_train)
+        val_loss = loss(preds, y_train.view(y_train.size(0), -1))
+        val_loss.backward(retain_graph=True)
+        optim.step()
 
-        if epoch % 100 == 0:
-            training_loss = loss(linearmodel(X_train),
-                                 y_train.view(y_train.size(0), -1))
-            print(f'## Epoch {epoch+1}/{n_epoch}, loss = {training_loss:.3f}')
+        if epoch % 1000 == 0:
             linearmodel.eval()
             with torch.no_grad():
+                training_loss = loss(linearmodel(X_train),
+                                     y_train.view(y_train.size(0), -1))
+                print(f'## Epoch {epoch+1}/{n_epoch}, loss = {training_loss:.3f}')
                 test_pred = linearmodel(X_test)
                 val_test = loss(test_pred, y_test.view(y_test.size(0), -1))
             linearmodel.train()
             print(f'~ test loss {val_test:.3f}')
+            if training_loss > prev_train_loss:
+                break
+            else:
+                prev_train_loss = training_loss
     return val_loss.detach(), val_test, linearmodel
 
 
@@ -110,5 +112,5 @@ def plot_coefs(n, p, phi, n_epoch, lr):
 
 
 if __name__ == "__main__":
-    n, p, phi, n_epoch, lr = 500, 20, .7, 26000, 1e-3
+    n, p, phi, n_epoch, lr = 80, 30, .5, 42000, 1e-3
     ridge, neural = plot_coefs(n, p, phi, n_epoch, lr)
