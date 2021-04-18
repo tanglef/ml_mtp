@@ -12,7 +12,7 @@ import os
 
 sns.set()
 plt.rcParams.update({'font.size': 16})
-seed = 112358
+seed = 11235813
 path_file = os.path.dirname(__file__)
 save_fig = True
 
@@ -30,12 +30,14 @@ def generate_data(n, p):
 
 
 class LinearReg(nn.Module):
-    def __init__(self, p, phi):
+    def __init__(self, p, phi, random_state=seed):
         super(LinearReg, self).__init__()
         self.linear = torch.nn.Linear(p, 1)
         self.d = nn.Dropout(phi)
+        self.random_state = random_state
 
     def forward(self, x):
+        torch.manual_seed(self.random_state)  # 1 batch
         out = self.d(x)
         out = self.linear(out)
         return out
@@ -57,12 +59,12 @@ def new_ridge(n, p, phi):
     return train_error, test_error, clf
 
 
-def withtorch(n, p, phi, n_epoch, lr):
+def withtorch(n, p, phi, n_epoch, lr, rs=seed):
     X, y, _, _ = generate_data(n, p)
     X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                         test_size=.3,
                                                         random_state=seed)
-    linearmodel = LinearReg(p, phi)
+    linearmodel = LinearReg(p, phi, random_state=rs)
     optim = torch.optim.SGD(linearmodel.parameters(), lr=lr)
     loss = F.mse_loss
     prev_train_loss = 1e8
@@ -73,7 +75,7 @@ def withtorch(n, p, phi, n_epoch, lr):
         val_loss.backward(retain_graph=True)
         optim.step()
 
-        if epoch % 1000 == 0:
+        if epoch % 10000 == 0:
             linearmodel.eval()
             with torch.no_grad():
                 training_loss = loss(linearmodel(X_train),
@@ -92,15 +94,21 @@ def withtorch(n, p, phi, n_epoch, lr):
 
 def make_curve(n, p, phi, n_epoch, lr):
     _, _, model_ridge = new_ridge(n, p, phi)
-    _, _, model_nn = withtorch(n, p, phi, n_epoch, lr)
-    return model_ridge, model_nn
+    n_rep = 60
+    mat = np.zeros((n_rep, p))
+    for i in range(n_rep):
+        print(f"~~~~~~~~~ Rep {i+1} / {n_rep} ~~~~~~~~~~~")
+        _, _, model_nn = withtorch(n, p, phi, n_epoch, lr, rs=i)
+        w = model_nn.linear.weight[0].detach().numpy()
+        mat[i, :] = w
+    return model_ridge, np.mean(mat, axis=0)
 
 
 def plot_coefs(n, p, phi, n_epoch, lr):
     ridge, neural = make_curve(n, p, phi, n_epoch, lr)
     plt.figure()
     plt.plot(ridge.coef_, label="ridge")
-    plt.plot(neural.linear.weight[0].detach().numpy(),
+    plt.plot(neural,
              marker="*", label="dropout")
     plt.legend()
     plt.tight_layout()
@@ -108,9 +116,9 @@ def plot_coefs(n, p, phi, n_epoch, lr):
         plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
                                  "dropout.pdf"))
     plt.show()
-    return ridge, nn
+    return ridge, neural
 
 
 if __name__ == "__main__":
-    n, p, phi, n_epoch, lr = 80, 30, .5, 42000, 1e-3
+    n, p, phi, n_epoch, lr = 80, 30, .5, 100000, 1e-2
     ridge, neural = plot_coefs(n, p, phi, n_epoch, lr)
