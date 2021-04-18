@@ -12,7 +12,7 @@ import os
 
 sns.set()
 plt.rcParams.update({'font.size': 16})
-seed = 11235813
+seed = 1123581
 path_file = os.path.dirname(__file__)
 save_fig = True
 
@@ -30,14 +30,12 @@ def generate_data(n, p):
 
 
 class LinearReg(nn.Module):
-    def __init__(self, p, phi, random_state=seed):
+    def __init__(self, p, phi):
         super(LinearReg, self).__init__()
         self.linear = torch.nn.Linear(p, 1)
         self.d = nn.Dropout(phi)
-        self.random_state = random_state
 
     def forward(self, x):
-        torch.manual_seed(self.random_state)  # 1 batch
         out = self.d(x)
         out = self.linear(out)
         return out
@@ -59,46 +57,38 @@ def new_ridge(n, p, phi):
     return train_error, test_error, clf
 
 
-def withtorch(n, p, phi, n_epoch, lr, rs=seed):
+def withtorch(n, p, phi, n_epoch, lr):
     X, y, _, _ = generate_data(n, p)
     X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                         test_size=.3,
                                                         random_state=seed)
-    linearmodel = LinearReg(p, phi, random_state=rs)
+    linearmodel = LinearReg(p, phi)
     optim = torch.optim.SGD(linearmodel.parameters(), lr=lr)
     loss = F.mse_loss
-    prev_train_loss = 1e8
     for epoch in range(n_epoch):
         optim.zero_grad()
         preds = linearmodel(X_train)
         val_loss = loss(preds, y_train.view(y_train.size(0), -1))
         val_loss.backward(retain_graph=True)
         optim.step()
-
         if epoch % 10000 == 0:
             linearmodel.eval()
             with torch.no_grad():
-                training_loss = loss(linearmodel(X_train),
-                                     y_train.view(y_train.size(0), -1))
-                print(f'## Epoch {epoch+1}/{n_epoch}, loss = {training_loss:.3f}')
+                print(f'## Epoch {epoch+1}/{n_epoch}, loss = {val_loss.item():.3f}')
                 test_pred = linearmodel(X_test)
                 val_test = loss(test_pred, y_test.view(y_test.size(0), -1))
             linearmodel.train()
             print(f'~ test loss {val_test:.3f}')
-            if training_loss > prev_train_loss:
-                break
-            else:
-                prev_train_loss = training_loss
     return val_loss.detach(), val_test, linearmodel
 
 
 def make_curve(n, p, phi, n_epoch, lr):
     _, _, model_ridge = new_ridge(n, p, phi)
-    n_rep = 60
+    n_rep = 3
     mat = np.zeros((n_rep, p))
     for i in range(n_rep):
         print(f"~~~~~~~~~ Rep {i+1} / {n_rep} ~~~~~~~~~~~")
-        _, _, model_nn = withtorch(n, p, phi, n_epoch, lr, rs=i)
+        _, _, model_nn = withtorch(n, p, phi, n_epoch, lr)
         w = model_nn.linear.weight[0].detach().numpy()
         mat[i, :] = w
     return model_ridge, np.mean(mat, axis=0)
@@ -120,5 +110,5 @@ def plot_coefs(n, p, phi, n_epoch, lr):
 
 
 if __name__ == "__main__":
-    n, p, phi, n_epoch, lr = 80, 30, .5, 100000, 1e-2
+    n, p, phi, n_epoch, lr = 80, 30, .5, 30000, 1e-3
     ridge, neural = plot_coefs(n, p, phi, n_epoch, lr)
