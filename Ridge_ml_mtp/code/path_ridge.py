@@ -32,4 +32,3 @@ if __name__ == "__main__":
     plt.xlabel("log regularization")
     plt.ylabel("coefficient value")
     plt.show()
-

@@ -12,7 +12,7 @@ import os
 
 sns.set()
 plt.rcParams.update({'font.size': 16})
-seed = 112358
+seed = 1123581
 path_file = os.path.dirname(__file__)
 save_fig = True
 
@@ -65,42 +65,40 @@ def withtorch(n, p, phi, n_epoch, lr):
     linearmodel = LinearReg(p, phi)
     optim = torch.optim.SGD(linearmodel.parameters(), lr=lr)
     loss = F.mse_loss
-    prev_train_loss = 1e8
     for epoch in range(n_epoch):
         optim.zero_grad()
         preds = linearmodel(X_train)
         val_loss = loss(preds, y_train.view(y_train.size(0), -1))
         val_loss.backward(retain_graph=True)
         optim.step()
-
-        if epoch % 1000 == 0:
+        if epoch % 10000 == 0:
             linearmodel.eval()
             with torch.no_grad():
-                training_loss = loss(linearmodel(X_train),
-                                     y_train.view(y_train.size(0), -1))
-                print(f'## Epoch {epoch+1}/{n_epoch}, loss = {training_loss:.3f}')
+                print(f'## Epoch {epoch+1}/{n_epoch}, loss = {val_loss.item():.3f}')
                 test_pred = linearmodel(X_test)
                 val_test = loss(test_pred, y_test.view(y_test.size(0), -1))
             linearmodel.train()
             print(f'~ test loss {val_test:.3f}')
-            if training_loss > prev_train_loss:
-                break
-            else:
-                prev_train_loss = training_loss
     return val_loss.detach(), val_test, linearmodel
 
 
 def make_curve(n, p, phi, n_epoch, lr):
     _, _, model_ridge = new_ridge(n, p, phi)
-    _, _, model_nn = withtorch(n, p, phi, n_epoch, lr)
-    return model_ridge, model_nn
+    n_rep = 3
+    mat = np.zeros((n_rep, p))
+    for i in range(n_rep):
+        print(f"~~~~~~~~~ Rep {i+1} / {n_rep} ~~~~~~~~~~~")
+        _, _, model_nn = withtorch(n, p, phi, n_epoch, lr)
+        w = model_nn.linear.weight[0].detach().numpy()
+        mat[i, :] = w
+    return model_ridge, np.mean(mat, axis=0)
 
 
 def plot_coefs(n, p, phi, n_epoch, lr):
     ridge, neural = make_curve(n, p, phi, n_epoch, lr)
     plt.figure()
     plt.plot(ridge.coef_, label="ridge")
-    plt.plot(neural.linear.weight[0].detach().numpy(),
+    plt.plot(neural,
              marker="*", label="dropout")
     plt.legend()
     plt.tight_layout()
@@ -108,9 +106,9 @@ def plot_coefs(n, p, phi, n_epoch, lr):
         plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
                                  "dropout.pdf"))
     plt.show()
-    return ridge, nn
+    return ridge, neural
 
 
 if __name__ == "__main__":
-    n, p, phi, n_epoch, lr = 80, 30, .5, 42000, 1e-3
+    n, p, phi, n_epoch, lr = 80, 30, .5, 30000, 1e-3
     ridge, neural = plot_coefs(n, p, phi, n_epoch, lr)
