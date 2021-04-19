@@ -28,11 +28,10 @@ def new_ridge(n, n_max, p, sigma, ridge=1e-7):
     X, y, _, _ = generate_data(n_max, p, sigma)
     train_reps = []
     test_reps = []
-    X_train, X_test, y_train, y_test = train_test_split(X, y,
-                                                        train_size=n,
-                                                        random_state=seed)
-    print(n, n_max, p, ridge, X_test.shape, y_test.shape)
-    for _ in range(10):
+    for i in range(10):
+        X_train, X_test, y_train, y_test = train_test_split(X, y,
+                                                            train_size=n,
+                                                            random_state=i)
         clf = Ridge(alpha=ridge)
         clf.fit(X_train, y_train)
         train_error = mean_squared_error(y_train, clf.predict(X_train))
