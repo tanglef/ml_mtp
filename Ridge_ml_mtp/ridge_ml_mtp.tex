@@ -149,6 +149,33 @@ truc
     \end{onlyenv}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Kernel trick
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Kernel trick}
+
+\begin{frame}{Kernel trick}{When doing less is better}
+    \begin{block}{Reduce the complexity}
+        If $p>n$, $(X^\top X + \lambda \mathrm{Id})^{-1}\in\bbR^{p\times p}$ is costly.
+        But we can actually only solve a $n\times n$ system thanks to the relation \emph{(proof with SVD)}:
+        \[X^\top (X X^\top + \lambda \mathrm{Id})^{-1}y = (X^\top X + \lambda \mathrm{Id})^{-1}X^\top y\enspace.\]
+    \end{block}
+    \pause
+    So we can write $\hat \beta = X^\top u$ with $u\in\bbR^{n}$. Denote $K=XX^\top$ the \textbf{Gram} matrix,
+    \begin{align*}
+        \hat y &= X\hat\beta = XX^\top u \\
+               &= K(K + \lambda \mathrm{Id})^{-1}y
+    \end{align*}
+
+    \begin{itemize}
+        \item New ridge problem smaller to solve.
+        \item \textbf{Opens the door for a lot more!}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Kernel ridge regression}{Digression in another space}
+fsdkj
+\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 % double descent
