@@ -149,6 +149,50 @@ truc
     \end{onlyenv}
 \end{frame}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Data augmentation
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Data augmentation}
+
+\begin{frame}{Data augmentation}{With images}
+    \begin{center}
+        Example of a small dog from CIFAR10 dataset
+    \end{center}
+    \begin{onlyenv}<1>
+        \begin{figure}
+            \centering
+            \includegraphics[scale=.6]{dog_cifar.pdf}
+        \end{figure}
+    \end{onlyenv}
+    \begin{onlyenv}<2->
+        \centering
+    \begin{columns}[t]
+        \column{.5\paperwidth}
+        \begin{figure}
+        \centering
+        \includegraphics[scale=.4]{dog_cifar.pdf}
+        \end{figure}
+        \column{.5\paperwidth}
+        \centering
+        \begin{onlyenv}<2>
+            \begin{figure}
+                \reflectbox{\includegraphics[scale=.4]{dog_cifar.pdf}
+                }
+            \end{figure}
+        \end{onlyenv}
+        \begin{onlyenv}<3>
+            \begin{figure}
+                \vspace{-1.2cm}
+            \hbox{\hspace{-3em}
+            \includegraphics[scale=.4, angle=30, origin]{dog_cifar.pdf}}
+            \end{figure}
+        \end{onlyenv}
+    \end{columns}
+    \end{onlyenv}
+\end{frame}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%
 % Kernel trick
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -194,7 +238,7 @@ Suppose $y_i=\varphi(X_i)$, then
 \[K(x,y)=\exp\left\{-\gamma\|x - y\|^2_2\right\}, \gamma=\frac{1}{2\cdot 0.2^2} \enspace.\]
 \begin{figure}
     \centering
-    \includegraphics[scale=.5]{KRR.pdf}
+    \includegraphics[scale=.45]{KRR.pdf}
 \end{figure}
 \end{frame}
 
