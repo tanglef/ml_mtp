@@ -173,8 +173,29 @@ truc
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Kernel ridge regression}{Digression in another space}
-fsdkj
+\begin{frame}{Kernel ridge regression}{Non linear relation}
+Suppose $y_i=\varphi(X_i)$, then
+ $\hat\varphi = \displaystyle\argmin_{\varphi\in\mathcal{H}} \|y-\varphi(X)\|^2_2 + \lambda \|\varphi\|_\mathcal{H}\enspace.$
+ \begin{block}{Representer theorem}
+        For $\mathcal{H}$ RKHS of kernel $K$ (symmetric!),
+     \[\varphi = \sum_{i=1}^n \alpha_i K(x_i, \bullet)\enspace.\]
+ \end{block}
+ \pause
+ The problem is now $\hat\alpha = \displaystyle\argmin_{\alpha} \|y-K\alpha\|^2_2 + \lambda \alpha^\top K \alpha$.
+ \begin{itemize}
+     \item first order conditions: $\nabla=(KK + \lambda K)\hat\alpha - Ky = 0$,
+     \item solution: \[\textcolor{red}{\hat\alpha = (K+\lambda\mathrm{Id})^{-1}y} \enspace.\]
+ \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Kernel ridge regression}{Example with \texttt{KeOps} package}
+    Gaussian kernel to estimate $\varphi(t) = t + \cos(6t)$ on noised data,
+\[K(x,y)=\exp\left\{-\gamma\|x - y\|^2_2\right\}, \gamma=\frac{1}{2\cdot 0.2^2} \enspace.\]
+\begin{figure}
+    \centering
+    \includegraphics[scale=.5]{KRR.pdf}
+\end{figure}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
