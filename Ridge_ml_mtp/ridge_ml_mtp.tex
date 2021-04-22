@@ -119,10 +119,20 @@ truc
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%
-% Presentation
+% Presentation - Linear Model
 %%%%%%%%%%%%%%%%%%%%%%
 
 \section{Linear model}
+
+\begin{frame}{Linear Regression}{Why use it?}
+    Argument à ajouter en faveur du modèle linéaire (slide peut-être inutile)
+    TODO : add argument en faveur du modèle linéaire
+\end{frame}
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+% Presentation - OLS problem
+%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Ridge regularization}{Why use it?}
     Ordinary least squares:
     \[\hat\beta = \argmin_{\beta} \|y-X\beta\|_2^2 \Longleftrightarrow \hat \beta = (X^\top X)^{-1}X^\top y\]
@@ -266,6 +276,39 @@ Suppose $y_i=\varphi(X_i)$, then
     \end{onlyenv}
 \end{frame}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% double descent - example OLS fail
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Double descent}{Example on samples number}
+    TODO : légende figure a changer
+    % Ordinary Least Square produce double descent phenomenon when train samples have the same size than the number of features.
+    \begin{columns}
+        \begin{column}{0.46\textwidth}
+            \begin{itemize}
+                \item Isotropic data: $X\sim\mathcal{N}(O,\mathrm{Id})$,
+                \item[]
+                \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
+                \item[]
+                \item $SNR = 5$, \\
+                $\sigma = \frac{\sqrt{\beta^{*^\top}X^\top X \beta^{*}}}{\sqrt{n} SNR} $
+                \item[]
+                \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.7\textwidth}
+            \begin{center}
+             \includegraphics[width=1\textwidth]{ols_fail_log.pdf}
+             \end{center}
+        \end{column}
+        \end{columns}
+    %\begin{onlyenv}<2>
+        \begin{block}{}
+            Ordinary Least Square produce double descent phenomenon when train samples have the same size than the number of features.
+        \end{block}
+    %\end{onlyenv}
+\end{frame}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % double descent with samples
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -294,6 +337,31 @@ Suppose $y_i=\varphi(X_i)$, then
         We can achieve monotonic test error decrease with ridge regularization varying $p$ or $n$ for the linear models with isotropic covariates.
         \end{block}
     \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Double descent}{With samples \citep{nakkiran2020optimal}}
+    In some cases ridge regularization can help get a monotonous error curve.
+    \begin{columns}
+        \begin{column}{0.46\textwidth}
+            \begin{itemize}
+                \item Isotropic data: $X\sim\mathcal{N}(O,\mathrm{Id})$,
+                \item[]
+                \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
+                \item[]
+                \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
+                \item $\lambda_{opt} = \sigma^2p$
+            \end{itemize}
+        \end{column}
+        \begin{column}{0.7\textwidth}
+            \begin{center}
+             \includegraphics[width=1\textwidth]{double_descent_sup.pdf}
+             \end{center}
+        \end{column}
+        \end{columns}
+        \begin{block}{}
+        This property remains true if $\lambda \geq \lambda_{opt}$ varying $n$ for the linear models with isotropic covariates.
+        % We can achieve monotonic test error decrease with ridge regularization varying $p$ or $n$ for the linear models with isotropic covariates.
+        \end{block}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%
