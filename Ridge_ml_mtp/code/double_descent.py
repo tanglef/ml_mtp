@@ -28,7 +28,7 @@ def new_ridge(n, n_max, p, sigma, ridge=1e-7):
     X, y, _, _ = generate_data(n_max, p, sigma)
     train_reps = []
     test_reps = []
-    for i in range(10):
+    for i in range(25):
         X_train, X_test, y_train, y_test = train_test_split(X, y,
                                                             train_size=n,
                                                             random_state=i)
@@ -72,6 +72,7 @@ def double_descent(n_max, p, sigma):
     plt.xlabel('n samples')
     plt.ylabel('MSE test')
     plt.legend()
+    plt.ylim((0, 1.6))
     plt.tight_layout()
     if save_fig:
         plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
