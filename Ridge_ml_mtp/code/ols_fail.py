@@ -68,7 +68,6 @@ def make_curve(n_samp, n_max, p, snr):
 def double_descent(n_max, p, snr):
     n_samples = np.linspace(5, 800 // 2, num=159, dtype=int)
     train_err, test_err = make_curve(n_samples, n_max, p, snr)
-    all_train = train_err
     all_test = test_err
 
     plt.figure()
