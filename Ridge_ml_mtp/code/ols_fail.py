@@ -85,4 +85,4 @@ def double_descent(n_max, p, snr):
 
 
 if __name__ == '__main__':
-    double_descent(800, 200, 8)
+    double_descent(1000, 200, 8)
