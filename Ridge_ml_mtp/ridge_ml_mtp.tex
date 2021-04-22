@@ -142,7 +142,7 @@ truc
         \item $X^\top X$ may be ill conditioned ($\kappa = \frac{\text{largest singular value}}{\text{smallest singular value}} \gg $ )
         \begin{onlyenv}<2->
             \begin{itemize}
-                \item \color{red}{ Translate spectrum by $\lambda$ using $X^\top X + \lambda \mathrm{Id}.$}
+                \item \color{red}{ Shift spectrum by $\lambda$ using $X^\top X + \lambda \mathrm{Id}.$}
             \end{itemize}
         \end{onlyenv}
         \item $p > n$ leads to infinite number of solutions for OLS.
@@ -163,7 +163,7 @@ truc
 % Ridge computation, SVD and LOO CV
 %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Ridge computational cost}
-\begin{frame}{Ridge regularization}{How compute it efficiently}
+\begin{frame}{Ridge estimator}{How to compute it efficiently}
     Solution is given by :
     $$ \hat \beta_{\lambda} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y$$
     % In many applications, $\lambda$ is a tuning parameters leading to computing a number of solution of $\beta_{ridge}$
@@ -307,9 +307,34 @@ Suppose $y_i=\varphi(X_i)$, then
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
+% Dropout
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Dropout regularization}
+\begin{frame}{Dropout}{Randomized drop}
+    \begin{itemize}
+        \item Randomly set units of a layer to $0$ with probability $\phi$ to avoid overfitting,
+        \item Inflate surviving ones by $1/(1-\phi)$ factor as compensation.
+    \end{itemize}
+
+    \begin{onlyenv}<1>
+        \begin{figure}
+            \centering
+            \includegraphics[scale=.4]{dropout_structure.pdf}
+        \end{figure}
+    \end{onlyenv}
+    \begin{onlyenv}<2>
+        \begin{figure}
+            \centering
+            \includegraphics[scale=.4]{dropout_structure_applied.pdf}
+        \end{figure}
+    \end{onlyenv}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
 % Double descent
 %%%%%%%%%%%%%%%%%%%%%%%%
-
+\section{Double descent}
 \begin{frame}{Double descent}{Over parametrization}
     Phenomenon observed in Deep Learning, Random Forests \dots
     \begin{onlyenv}<1>
@@ -358,7 +383,7 @@ Suppose $y_i=\varphi(X_i)$, then
         \end{columns}
     %\begin{onlyenv}<2>
         \begin{block}{}
-            Ordinary Least Square produce double descent phenomenon when train samples have the same size than the number of features.
+            Ordinary Least Square produce double descent phenomenon when training set has same size as the number of features.
         \end{block}
     %\end{onlyenv}
 \end{frame}
@@ -424,7 +449,6 @@ Suppose $y_i=\varphi(X_i)$, then
 
 \begin{frame}
     \bibliography{../sty/references.bib}
-
 \end{frame}
 
 
