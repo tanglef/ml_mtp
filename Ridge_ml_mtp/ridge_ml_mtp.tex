@@ -160,6 +160,31 @@ truc
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
+% Ridge computation, SVD and LOO CV
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Ridge computational cost}
+\begin{frame}{Ridge regularization}{How compute it efficiently}
+    Solution is given by :
+    $$ \hat \beta_{\lambda} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y$$
+    % In many applications, $\lambda$ is a tuning parameters leading to computing a number of solution of $\beta_{ridge}$
+    Problems :
+    \begin{itemize}
+        \item $\lambda$ is a tuning parameter $\Rightarrow$ computing many solution of $\hat \beta_{\lambda}$
+    \end{itemize}
+   \begin{onlyenv}<2->
+        \begin{block}{Use ONE SVD ($X = U D V^\top$) to compute many estimation}
+        % Use SVD (singular value decomposition) to compute efficiently many solution :
+        %\begin{align*}
+        $$    \hat \beta_{\lambda} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y
+            = V(D^\top D \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}D^\top U^\top y
+            = \sum_{i=1}^{rg(X)} u_j \frac{d_j}{d_j^2 + \lambda} \langle u_j \vert y \rangle $$
+        % \end{align*}
+        \end{block}
+    \end{onlyenv}
+    TO DO : add equation 10 du papier puis la LOOCV sur une autre slide
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
 % Kernel trick
 %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Kernel trick}
