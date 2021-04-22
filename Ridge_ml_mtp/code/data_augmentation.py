@@ -55,13 +55,25 @@ def plot_results(n, p, m, pen):
     augmented = np.concatenate(augmented, axis=0)
 
     plt.figure()
-    plt.plot(augmented[:, 0], augmented[:, 1], "o", label="augmented data",
-             ms=2.5)
-    plt.plot(Xr[:, 0], Xr[:, 1], "o", label="original data")
+    plt.scatter(Xr[:, 0], Xr[:, 1], label="original data")
     plt.xlabel(r'$X_1$')
     plt.ylabel(r'$X_2$')
     plt.legend()
     plt.tight_layout()
+    if save_fig:
+        plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
+                                 "og_data_augm.pdf"))
+    plt.figure()
+    plt.scatter(Xr[:, 0], Xr[:, 1], s=20, zorder=2, label="original data")
+    plt.scatter(augmented[:, 0], augmented[:, 1], label="augmented data",
+                s=2.5, zorder=1)
+    plt.xlabel(r'$X_1$')
+    plt.ylabel(r'$X_2$')
+    plt.legend()
+    plt.tight_layout()
+    if save_fig:
+        plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
+                                 "data_augmentation.pdf"))
     plt.show(block=False)
 
     coef_ridges = ridge.coef_

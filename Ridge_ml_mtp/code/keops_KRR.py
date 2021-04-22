@@ -29,7 +29,7 @@ if __name__ == "__main__":
     r1, r2 = -5, 5
     x = ((r2 - r1) * torch.rand(N, 1) + r1).type(dtype)
     # signal
-    b = x + torch.cos(6*x) * x + 0.1 * torch.randn(N, 1).type(dtype)
+    b = x + torch.cos(6*x) * x + .8 * torch.randn(N, 1).type(dtype)
 
     alpha = 1.0  # penalty
     K = gaussian_kernel(x, x)

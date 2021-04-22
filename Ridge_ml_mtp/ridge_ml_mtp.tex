@@ -58,8 +58,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title[Short title] %shown at the top of frames
-{Long title} %shown in title frame
+\title[] %shown at the top of frames
+{Ridge regularization: an essential concept in data science} %shown in title frame
 \subtitle{Based on the article of Trevor Hastie 2020}
 
 \date{04-2021} % explicitly set date instead of \today
@@ -159,6 +159,55 @@ truc
     \end{onlyenv}
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Kernel trick
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Kernel trick}
+
+\begin{frame}{Kernel trick}{When doing less is better}
+    \begin{block}{Reduce the complexity}
+        If $p>n$, $(X^\top X + \lambda \mathrm{Id})^{-1}\in\bbR^{p\times p}$ is costly.
+        But we can actually only solve a $n\times n$ system thanks to the relation \emph{(proof with SVD)}:
+        \[X^\top (X X^\top + \lambda \mathrm{Id})^{-1}y = (X^\top X + \lambda \mathrm{Id})^{-1}X^\top y\enspace.\]
+    \end{block}
+    \pause
+    So we can write $\hat \beta = X^\top u$ with $u\in\bbR^{n}$. Denote $K=XX^\top$ the \textbf{Gram} matrix,
+    \begin{align*}
+        \hat y &= X\hat\beta = XX^\top u \\
+               &= K(K + \lambda \mathrm{Id})^{-1}y
+    \end{align*}
+
+    \begin{itemize}
+        \item New ridge problem smaller to solve.
+        \item \textbf{Opens the door for a lot more!}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Kernel ridge regression}{Non linear relation}
+Suppose $y_i=\varphi(X_i)$, then
+ $\hat\varphi = \displaystyle\argmin_{\varphi\in\mathcal{H}} \|y-\varphi(X)\|^2_2 + \lambda \|\varphi\|_\mathcal{H}\enspace.$
+ \begin{block}{Representer theorem}
+        For $\mathcal{H}$ RKHS of kernel $K$ (symmetric!),
+     \[\varphi = \sum_{i=1}^n \alpha_i K(x_i, \bullet)\enspace.\]
+ \end{block}
+ \pause
+ The problem is now $\hat\alpha = \displaystyle\argmin_{\alpha} \|y-K\alpha\|^2_2 + \lambda \alpha^\top K \alpha$.
+ \begin{itemize}
+     \item first order conditions: $\nabla=(KK + \lambda K)\hat\alpha - Ky = 0$,
+     \item solution: \[\textcolor{red}{\hat\alpha = (K+\lambda\mathrm{Id})^{-1}y} \enspace.\]
+ \end{itemize}
+\end{frame}
+
+
+\begin{frame}{Kernel ridge regression}{Example with \texttt{KeOps} package}
+    Gaussian kernel to estimate $\varphi(t) = t + t\cos(6t)$ on noised data,
+\[K(x,y)=\exp\left\{-\gamma\|x - y\|^2_2\right\}, \gamma=\frac{1}{2\cdot 0.2^2} \enspace.\]
+\begin{figure}
+    \centering
+    \includegraphics[scale=.45]{KRR.pdf}
+\end{figure}
+\end{frame}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 % Data augmentation
@@ -202,58 +251,38 @@ truc
     \end{onlyenv}
 \end{frame}
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%
-% Kernel trick
-%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Kernel trick}
-
-\begin{frame}{Kernel trick}{When doing less is better}
-    \begin{block}{Reduce the complexity}
-        If $p>n$, $(X^\top X + \lambda \mathrm{Id})^{-1}\in\bbR^{p\times p}$ is costly.
-        But we can actually only solve a $n\times n$ system thanks to the relation \emph{(proof with SVD)}:
-        \[X^\top (X X^\top + \lambda \mathrm{Id})^{-1}y = (X^\top X + \lambda \mathrm{Id})^{-1}X^\top y\enspace.\]
-    \end{block}
-    \pause
-    So we can write $\hat \beta = X^\top u$ with $u\in\bbR^{n}$. Denote $K=XX^\top$ the \textbf{Gram} matrix,
-    \begin{align*}
-        \hat y &= X\hat\beta = XX^\top u \\
-               &= K(K + \lambda \mathrm{Id})^{-1}y
-    \end{align*}
-
+\begin{frame}{Data augmentation}{And with cloud points?}
+    \begin{figure}
+        \centering
+        \includegraphics[scale=.5]{og_data_augm.pdf}
+    \end{figure}
     \begin{itemize}
-        \item New ridge problem smaller to solve.
-        \item \textbf{Opens the door for a lot more!}
+        \item \textbf{Goal:} Use the data we have to create new points,
+        \item \textbf{But} can't flip it / make a small rotation, $\dots$
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Kernel ridge regression}{Non linear relation}
-Suppose $y_i=\varphi(X_i)$, then
- $\hat\varphi = \displaystyle\argmin_{\varphi\in\mathcal{H}} \|y-\varphi(X)\|^2_2 + \lambda \|\varphi\|_\mathcal{H}\enspace.$
- \begin{block}{Representer theorem}
-        For $\mathcal{H}$ RKHS of kernel $K$ (symmetric!),
-     \[\varphi = \sum_{i=1}^n \alpha_i K(x_i, \bullet)\enspace.\]
- \end{block}
- \pause
- The problem is now $\hat\alpha = \displaystyle\argmin_{\alpha} \|y-K\alpha\|^2_2 + \lambda \alpha^\top K \alpha$.
- \begin{itemize}
-     \item first order conditions: $\nabla=(KK + \lambda K)\hat\alpha - Ky = 0$,
-     \item solution: \[\textcolor{red}{\hat\alpha = (K+\lambda\mathrm{Id})^{-1}y} \enspace.\]
- \end{itemize}
-\end{frame}
-
-
-\begin{frame}{Kernel ridge regression}{Example with \texttt{KeOps} package}
-    Gaussian kernel to estimate $\varphi(t) = t + \cos(6t)$ on noised data,
-\[K(x,y)=\exp\left\{-\gamma\|x - y\|^2_2\right\}, \gamma=\frac{1}{2\cdot 0.2^2} \enspace.\]
-\begin{figure}
-    \centering
-    \includegraphics[scale=.45]{KRR.pdf}
-\end{figure}
+\begin{frame}{Data augmentation}{Perturbations on the cloud}
+    One way to do so: create perturbated points from the data we have:
+    \[x_{ij}=x_i + \varepsilon_{i,j}, \varepsilon_{ij}\sim\mathcal{N}\left(0, \frac{\lambda}{n}\mathrm{Id}\right), i\in[n], j\in[m]\enspace,\]
+    \[\text{with associated response }y_{ij}=y_i\enspace .\]
+    \vspace{-.5cm}
+    \begin{columns}
+        \begin{column}{.6\paperwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[scale=.35]{data_augmentation.pdf}
+            \end{figure}
+        \end{column}
+        \begin{column}{.4\paperwidth}
+            Added points compensate each other $$ \textcolor{red}{\sum_i\frac{1}{m}\sum_jx_{ij}x_{ij}^\top \simeq (XX^\top + \lambda \mathrm{Id})}$$
+            OLS with $X^{augmented} \simeq$ Ridge with $X$
+        \end{column}
+    \end{columns}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-% double descent
+% Double descent
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{Double descent}{Over parametrization}
