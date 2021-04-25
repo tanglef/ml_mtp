@@ -15,6 +15,7 @@
 \usepackage[scaled]{beramono}
 \usepackage[scale=1.05]{AlegreyaSans}
 \usepackage{../sty/shortcuts_fb}
+\usepackage{minted}
 
 \usetikzlibrary{spy}
 \usepackage[round]{natbib}
@@ -400,6 +401,60 @@ Suppose $y_i=\varphi(X_i)$, then
         \end{figure}
     \end{onlyenv}
 
+\end{frame}
+
+
+\begin{frame}{Dropout}{Linear regression and Ridge}
+    Denoting $(I_{ij})_{ij}$ the dropout mask on $X=(x_{ij})_{ij}$ then cost function is:
+
+    \[L(\beta) = \frac{1}{2}\sum_{i=1}^n\left(y_i - \sum_{j=1}^p x_{ij}I_{ij}\beta_j\right)^2\enspace.\]
+
+    Note that $\bbE[I_{ij}] = 0\phi + \frac{1}{1-\phi} (1-\phi) = 1$, thus:
+
+    \[\bbE\left[\frac{\partial}{\partial \beta}\right] = XX^\top\beta - X^\top y + \frac{\phi}{1 - \phi}\mathrm{diag}(\|x_j\|^2)_{j=1}^p\beta\enspace, \]
+
+    \begin{onlyenv}<2->
+        \begin{block}{Link with ridge}
+            Solving first order conditions:
+            \[\hat\beta^{dropout} = \left(X^\top X - \frac{\phi}{1 - \phi}\diag(\|x_j\|^2)\right)^{-1}X^\top y\enspace.\]
+            Normalizing out data leads \textbf{in average} to the ridge estimator for $\lambda=\phi / (1 - \phi)$.
+        \end{block}
+
+    \end{onlyenv}
+
+\end{frame}
+
+
+\begin{frame}[fragile]{Dropout}{In practice with \texttt{PyTorch}}
+No hastle to implement a dropout layer in a Neural Network with \texttt{PyTorch} with this inflation rate:
+\begin{minted}[
+    frame=lines,
+    fontsize=\footnotesize,
+    linenos
+    ]
+    {python}
+
+class MyModel(nn.Module):
+    def __init__(self, phi):
+        super(MyModel, self).__init__()
+        # all your great layers
+        self.drop = nn.Dropout(phi)
+
+    def forward(self, x):
+        # forward x until the desired layer
+        out = self.drop(current_x)
+        # forward out until the output layer
+        return out
+\end{minted}
+\end{frame}
+
+\begin{frame}{Dropout experiment}
+    With $\phi = 0.5$ (generally $0.3 \leq \phi \leq 0.5$) and $5$ repetitions:
+    \begin{figure}
+        \centering
+        \includegraphics[scale=.5]{dropout.pdf}
+        \caption{Coefficients of $\beta$ for the ridge and dropout method with $n=80, p=30$ and ridge penalty $\lambda=\phi / (1 - \phi)=1$}
+    \end{figure}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%

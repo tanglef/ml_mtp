@@ -84,7 +84,7 @@ def withtorch(n, p, phi, n_epoch, lr):
 
 def make_curve(n, p, phi, n_epoch, lr):
     _, _, model_ridge = new_ridge(n, p, phi)
-    n_rep = 3
+    n_rep = 5
     mat = np.zeros((n_rep, p))
     for i in range(n_rep):
         print(f"~~~~~~~~~ Rep {i+1} / {n_rep} ~~~~~~~~~~~")
