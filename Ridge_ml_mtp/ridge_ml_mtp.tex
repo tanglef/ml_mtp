@@ -164,24 +164,95 @@ truc
 %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Ridge computational cost}
 \begin{frame}{Ridge estimator}{How to compute it efficiently}
-    Solution is given by :
-    $$ \hat \beta_{\lambda} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y$$
+    Solution is given by : $ \hat \beta_{\lambda} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y$
+    \\
     % In many applications, $\lambda$ is a tuning parameters leading to computing a number of solution of $\beta_{ridge}$
-    Problems :
-    \begin{itemize}
-        \item $\lambda$ is a tuning parameter $\Rightarrow$ computing many solution of $\hat \beta_{\lambda}$
-    \end{itemize}
+    Problem : $\lambda$ is a tuning parameter $\Rightarrow$ computing many solution of $\hat \beta_{\lambda}$
+    % \begin{itemize}
+    %     \item $\lambda$ is a tuning parameter $\Rightarrow$ computing many solution of $\hat \beta_{\lambda}$
+    % \end{itemize}
    \begin{onlyenv}<2->
         \begin{block}{Use ONE SVD ($X = U D V^\top$) to compute many estimation}
         % Use SVD (singular value decomposition) to compute efficiently many solution :
         %\begin{align*}
         $$    \hat \beta_{\lambda} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y
             = V(D^\top D \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}D^\top U^\top y
-            = \sum_{i=1}^{rg(X)} u_j \frac{d_j}{d_j^2 + \lambda} \langle u_j \vert y \rangle $$
+            = \sum_{i=1}^{rg(X)} v_j \frac{d_j}{d_j^2 + \lambda} \langle u_j \vert y \rangle $$
         % \end{align*}
         \end{block}
     \end{onlyenv}
-    TO DO : add equation 10 du papier puis la LOOCV sur une autre slide
+    \begin{onlyenv}<3->
+        \begin{block}{Use ONE SVD ($X = U D V^\top$) to compute many prediction}
+        % Use SVD (singular value decomposition) to compute efficiently many solution :
+        %\begin{align*}
+        $$ \hat y_\lambda  = X \hat \beta_{\lambda} %= (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y
+        %= U D V^\top V(D^\top D \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}D^\top U^\top y
+        = U D (D^\top D \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}D^\top U^\top y
+        = \sum_{i=1}^{rg(X)} u_j \frac{d_j^2}{d_j^2 + \lambda} \langle u_j \vert y \rangle $$
+        % \end{align*}
+        \end{block}
+    \end{onlyenv}
+    % TO DO : add equation 10 du papier puis la LOOCV sur une autre slide
+\end{frame}
+
+
+\begin{frame}{Ridge estimator}{LOO CV}
+    Let us note :
+    \begin{itemize}
+        \item $\hat \beta_\lambda^{(-i)}$ the estimated coefficients without using the pair $(x_i, y_i)$.
+        \item $R^\lambda =  X(X^\top X + \lambda \mathrm{Id})X^\top$ the Ridge operator matrix
+    \end{itemize}
+    \begin{onlyenv}<2->
+        \begin{block}{Easy computation for LOO-CV}
+        $$ LOO_\lambda
+        = \sum_{i=1}^n (y_i - x_i^\top \hat \beta_\lambda^{(-i)} )^2
+        = \sum_{i=1}^n \frac{(y_i - x_i^\top \hat \beta_\lambda)^2}{(1 - R^\lambda_{ii})^2} $$
+        \end{block}
+    \end{onlyenv}
+    \begin{onlyenv}<3->
+        \begin{block}{}
+        $$ R^\lambda
+        =  X(X^\top X + \lambda \mathrm{Id})X^\top
+        = UD(D^\top D + \lambda \mathrm{Id})^{-1} D^\top U
+        = U S(\lambda) U$$
+        \center{with $S(\lambda)$ the diagonal shrinkage matrix with elements $\frac{d_j^2}{d_j^2 + \lambda}$}
+        \end{block}
+    \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Ridge estimator}{Bias and Variance}
+    % As other regularized model, Ridge coefficients are shrunk toward the origin.
+    Suppose that data arise from linear model,  with i.i.d zero-mean errors $\varepsilon_i$
+    $$ y_i = x_i^\top \beta + \varepsilon_i, \quad i=1, \dots, n$$
+    Then, the Ridge estimate $\hat \beta_{\lambda}$ are biaised estimate of $\beta$.
+    \begin{onlyenv}<2->
+        \begin{block}{Bias}
+            If the $x_i$ are assumed fixed, $n > p$ and $X$ has full column rank, we get :
+            $$ Biais(\hat \beta_\lambda) = \sum_{j=1}^p v_j \frac{\lambda}{d_j^2 + \lambda} \langle v_j \vert \beta \rangle $$
+        \end{block}
+        Smaller the $j^{th}$ singular values is, bigger is the shrinkage associated.
+    \end{onlyenv}
+    % Let us note :
+    % \begin{itemize}
+    %     \item $\hat \beta_\lambda^{(-i)}$ the estimated coefficients without using the pair $(x_i, y_i)$.
+    %     \item $R^\lambda =  X(X^\top X + \lambda \mathrm{Id})X^\top$ the Ridge operator matrix
+    % \end{itemize}
+    % \begin{onlyenv}<2->
+    %     \begin{block}{Easy computation for LOO-CV}
+    %     $$ LOO_\lambda
+    %     = \sum_{i=1}^n (y_i - x_i^\top \hat \beta_\lambda^{(-i)} )^2
+    %     = \sum_{i=1}^n \frac{(y_i - x_i^\top \hat \beta_\lambda)^2}{(1 - R^\lambda_{ii})^2} $$
+    %     \end{block}
+    % \end{onlyenv}
+    % \begin{onlyenv}<3->
+    %     \begin{block}{}
+    %     $$ R^\lambda
+    %     =  X(X^\top X + \lambda \mathrm{Id})X^\top
+    %     = UD(D^\top D + \lambda \mathrm{Id})^{-1} D^\top U
+    %     = U S(\lambda) U$$
+    %     \center{with $S(\lambda)$ the diagonal shrinkage matrix with elements $\frac{d_j^2}{d_j^2 + \lambda}$}
+    %     \end{block}
+    % \end{onlyenv}
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -365,7 +436,7 @@ Suppose $y_i=\varphi(X_i)$, then
     \begin{columns}
         \begin{column}{0.46\textwidth}
             \begin{itemize}
-                \item Isotropic data: $X\sim\mathcal{N}(O,\mathrm{Id})$,
+                \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                 \item[]
                 \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
                 \item[]
