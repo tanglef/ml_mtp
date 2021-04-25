@@ -167,12 +167,12 @@ truc
     Solution is given by : $ \hat \beta_{\lambda} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y$
     \\
     % In many applications, $\lambda$ is a tuning parameters leading to computing a number of solution of $\beta_{ridge}$
-    Problem : $\lambda$ is a tuning parameter $\Rightarrow$ computing many solution of $\hat \beta_{\lambda}$
+    Problem : $\lambda$ is a tuning parameter $\Longrightarrow$ computing many $\hat \beta_{\lambda}$
     % \begin{itemize}
     %     \item $\lambda$ is a tuning parameter $\Rightarrow$ computing many solution of $\hat \beta_{\lambda}$
     % \end{itemize}
    \begin{onlyenv}<2->
-        \begin{block}{Use ONE SVD ($X = U D V^\top$) to compute many estimation}
+        \begin{block}{Use ONE SVD ($X = U D V^\top$) to compute many estimations}
         % Use SVD (singular value decomposition) to compute efficiently many solution :
         %\begin{align*}
         $$    \hat \beta_{\lambda} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y
@@ -182,7 +182,7 @@ truc
         \end{block}
     \end{onlyenv}
     \begin{onlyenv}<3->
-        \begin{block}{Use ONE SVD ($X = U D V^\top$) to compute many prediction}
+        \begin{block}{Use ONE SVD ($X = U D V^\top$) to compute many predictions}
         % Use SVD (singular value decomposition) to compute efficiently many solution :
         %\begin{align*}
         $$ \hat y_\lambda  = X \hat \beta_{\lambda} %= (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y
@@ -197,7 +197,7 @@ truc
 
 
 \begin{frame}{Ridge estimator}{LOO CV}
-    Let us note :
+    Let us denote :
     \begin{itemize}
         \item $\hat \beta_\lambda^{(-i)}$ the estimated coefficients without using the pair $(x_i, y_i)$.
         \item $R^\lambda =  X(X^\top X + \lambda \mathrm{Id})X^\top$ the Ridge operator matrix
@@ -212,7 +212,7 @@ truc
     \begin{onlyenv}<3->
         \begin{block}{}
         $$ R^\lambda
-        =  X(X^\top X + \lambda \mathrm{Id})X^\top
+        =  X(X^\top X + \lambda \mathrm{Id})^{-1}X^\top
         = UD(D^\top D + \lambda \mathrm{Id})^{-1} D^\top U
         = U S(\lambda) U$$
         \center{with $S(\lambda)$ the diagonal shrinkage matrix with elements $\frac{d_j^2}{d_j^2 + \lambda}$}
@@ -222,15 +222,15 @@ truc
 
 \begin{frame}{Ridge estimator}{Bias and Variance}
     % As other regularized model, Ridge coefficients are shrunk toward the origin.
-    Suppose that data arise from linear model,  with i.i.d zero-mean errors $\varepsilon_i$
+    Suppose that the data arises from a linear model with \emph{i.i.d} zero-mean errors $\varepsilon_i$
     $$ y_i = x_i^\top \beta + \varepsilon_i, \quad i=1, \dots, n$$
-    Then, the Ridge estimate $\hat \beta_{\lambda}$ are biaised estimate of $\beta$.
+    Then, the Ridge estimate $\hat \beta_{\lambda}$ is a biased estimate of $\beta$.
     \begin{onlyenv}<2->
         \begin{block}{Bias}
             If the $x_i$ are assumed fixed, $n > p$ and $X$ has full column rank, we get :
-            $$ Biais(\hat \beta_\lambda) = \sum_{j=1}^p v_j \frac{\lambda}{d_j^2 + \lambda} \langle v_j \vert \beta \rangle $$
+            $$ \mathrm{Bias}(\hat \beta_\lambda) = \sum_{j=1}^p v_j \frac{\lambda}{d_j^2 + \lambda} \langle v_j \vert \beta \rangle $$
         \end{block}
-        Smaller the $j^{th}$ singular values is, bigger is the shrinkage associated.
+        The smaller the $j^{th}$ singular value is, the bigger the shrinkage associated is.
     \end{onlyenv}
     % Let us note :
     % \begin{itemize}
