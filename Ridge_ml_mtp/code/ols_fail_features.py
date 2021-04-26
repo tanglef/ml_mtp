@@ -43,6 +43,10 @@ def generate_data_snr(n, p, snr=5):
 def new_ols(n_train, n_test, p_train, p, snr):
     n = n_train + n_test
     X, Z, y, _, _, _ = generate_data_snr(n, p, snr)
+    # W = np.hstack([X, Z])
+    q = int(p*(p+1)/2)
+    rng = np.random.default_rng(21071994)
+    Z = rng.multivariate_normal([0], np.eye(1), (n, q)).reshape(n, q)
     W = np.hstack([X, Z])
     train_reps = []
     test_reps = []
@@ -66,6 +70,9 @@ def make_curve(n_train, n_test, p_train_, p, snr):
     train_errors = []
     test_errors = []
     for p_train in p_train_:
+        #print(p_train)
+        # print(n_train)
+        # print(p)
         train, test = new_ols(n_train, n_test, p_train, p, snr)
         train_errors.append(train)
         test_errors.append(test)
@@ -74,7 +81,7 @@ def make_curve(n_train, n_test, p_train_, p, snr):
 
 def double_descent(n_train, n_test, p, snr):
     q = int(p*(p+1)/2)
-    p_train_ = np.linspace(2, 2*p, num=2*p, dtype=int)
+    p_train_ = np.linspace(2, (p+q)//2, num=(p+q)//2-2, dtype=int)
     # print(p_train_)
     # return
     train_err, test_err = make_curve(n_train, n_test, p_train_, p, snr)
@@ -95,4 +102,4 @@ def double_descent(n_train, n_test, p, snr):
 
 
 if __name__ == '__main__':
-    double_descent(100, 100, 100, 5)
+    double_descent(50, 100, 50, 5)
