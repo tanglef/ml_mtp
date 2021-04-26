@@ -33,7 +33,7 @@ def generate_data_snr(n, p, snr=5):
     theta = np.zeros(q)
     # theta = np.random.choice([-1., 0., 0., 0., 1.], q)
     # theta /= np.linalg.norm(theta, 2)  # normed parameters
-    sigma = np.sqrt(beta.T@X.T@X@beta + theta.T@Z.T@Z@theta)/(np.sqrt(n)*snr)
+    sigma = np.sqrt(beta.T@X.T@X@beta)/(np.sqrt(n)*snr)
     noise = rng.multivariate_normal([0], sigma**2 * np.eye(1), (n)).reshape(n)
     y = X @ beta + Z @ theta  + noise
     return X, Z, y, beta, theta, noise
@@ -84,8 +84,7 @@ def double_descent(n_train, n_test, p, snr):
     plt.figure()
     plt.plot(p_train_, all_test, label='OLS')
     plt.xlabel('n features')
-    plt.ylabel('MSE tes
-    t log-scaled')
+    plt.ylabel('MSE test log-scaled')
     plt.yscale('log')
     plt.legend()
     plt.tight_layout()
@@ -96,4 +95,4 @@ def double_descent(n_train, n_test, p, snr):
 
 
 if __name__ == '__main__':
-    double_descent(200, 200, 200, 5)
+    double_descent(100, 100, 100, 5)
