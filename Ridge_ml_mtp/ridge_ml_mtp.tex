@@ -527,7 +527,7 @@ class MyModel(nn.Module):
     \begin{columns}
         \begin{column}{0.46\textwidth}
             \begin{itemize}
-                \item Isotropic data: $X\sim\mathcal{N}(O,\mathrm{Id})$,
+                \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                 \item[]
                 \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
                 \item[]
@@ -553,7 +553,7 @@ class MyModel(nn.Module):
     \begin{columns}
         \begin{column}{0.46\textwidth}
             \begin{itemize}
-                \item Isotropic data: $X\sim\mathcal{N}(O,\mathrm{Id})$,
+                \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                 \item[]
                 \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
                 \item[]
@@ -572,6 +572,56 @@ class MyModel(nn.Module):
         % We can achieve monotonic test error decrease with ridge regularization varying $p$ or $n$ for the linear models with isotropic covariates.
         \end{block}
 \end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% double ridge is lasso
+%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Rank selection for matrix problem}{}
+    Suppose $X \in \mathbb{R}^{m\times n }$. Then we get the rank selection for matrix problem :
+    $$\min_{M} \|X-M\|_F^2 \quad \text{s. t.} \quad  rank(M) \leq q$$.
+    \begin{onlyenv}<2->
+    \begin{itemize}
+        \item Solution : set all the singular values of $D$ to zero, except the $q$ larger.
+        \item Problem : the rank constraint makes this problem non-convex
+    \end{itemize}
+    \end{onlyenv}
+    \begin{onlyenv}<3->
+        \begin{block}{Convex relaxation - LASSO version of rank selection matrix}
+            $$\widetilde{M} = \argmin_{M} \|X-M\|_F^2 + \lambda \|M\|_*$$
+            \begin{center}
+                with $\|M\|_*$ denoting the nuclear norm - sum of singular values.
+            \end{center}
+        \end{block}
+    \end{onlyenv}
+    \begin{onlyenv}<4->
+        \begin{itemize}
+            \item Solution : soft-tresholded the singular values : $\max(d_i  -\lambda, 0)$
+        \end{itemize}
+        \end{onlyenv}
+\end{frame}
+\begin{frame}{Double Ridge Problem}{}
+    Let $X \in \mathbb{R}^{m\times n },~  A \in \mathbb{R}^{m\times q}$ and $B \in \mathbb{R}^{n \times q }$. We get the double ridge problem :
+    $$ \widetilde{A}, \widetilde{B} =  \argmin_{A, B} \|X-AB^\top \|_F^2 + \lambda \|A \|_F^2 +\lambda \|B \|_F^2 $$
+    \begin{onlyenv}<2->
+        \begin{itemize}
+            \item This is a $\ell_2$ bi-convex problem.
+            \item This problem as  the same solution that the $\ell_1$ convex relation problem  :
+            $$ \widetilde{A} \widetilde{B}^\top = \widetilde{M} $$
+        \end{itemize}
+    \end{onlyenv}
+    \begin{onlyenv}<2->
+        \begin{block}{Interest in variation of theses  problems}
+            If $X$ has missing-values, we can solve the \textit{matrix completion} objective :
+            $$\widetilde{M} = \argmin_{M} \|P_\Omega (X-M)\|_F^2 + \lambda \|M\|_*$$
+            \center{where $P_\Omega$ projects onto the observed values of $X$}
+        \end{block}
+        \begin{itemize}
+            \item This problem can be solved for large $X$ using double ridge problem.
+        \end{itemize}
+    \end{onlyenv}
+\end{frame}
+
+
 
 %%%%%%%%%%%%%%%%%
 % Biblio
