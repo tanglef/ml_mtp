@@ -23,7 +23,7 @@ if __name__ == "__main__":
     X, y, coeff = make_regression(n, p, coef=True,
                                   random_state=10)
     coeff -= 30
-    snr = 5
+    snr = 7
     sigma = np.sqrt(coeff.T@X.T@X@coeff)/(np.sqrt(n)*snr)
     noise = np.random.normal(scale=sigma, size=n)
     y = X @ coeff + noise
@@ -52,7 +52,7 @@ if __name__ == "__main__":
     plt.legend(ncol=2, bbox_to_anchor=(1.21, 0.4, 0.5, 0.5))
     plt.show()
     plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
-                                 "path_ridge_coef.pdf"))
+                                 "path_ridge_coef_"+str(snr)+"_.pdf"))
     plt.clf
 
     plt.figure()
@@ -66,4 +66,4 @@ if __name__ == "__main__":
     plt.legend()
     plt.show()
     plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
-                                 "path_ridge_loo.pdf"))
+                                 "path_ridge_loo_"+str(snr)+"_.pdf"))
