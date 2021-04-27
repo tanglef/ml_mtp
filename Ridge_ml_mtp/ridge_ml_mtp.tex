@@ -486,7 +486,7 @@ Suppose $y_i=\varphi(X_i)$, then
 
 \begin{frame}{Data augmentation}{Perturbations on the cloud}
     One way to do so: create perturbated points from the data we have:
-    \[x_{ij}=x_i + \varepsilon_{i,j}, \varepsilon_{ij}\sim\mathcal{N}\left(0, \frac{\lambda}{n}\mathrm{Id}\right), i\in[n], j\in[m]\enspace,\]
+    \[x_{ij}=x_i + \varepsilon_{ij}, \varepsilon_{ij}\sim\mathcal{N}\left(0, \frac{\lambda}{n}\mathrm{Id}\right), i\in[n], j\in[m]\enspace,\]
     \[\text{with associated response }y_{ij}=y_i\enspace .\]
     \vspace{-.5cm}
     \begin{columns}
@@ -541,7 +541,7 @@ Suppose $y_i=\varphi(X_i)$, then
     \begin{onlyenv}<2->
         \begin{block}{Link with ridge}
             Solving first order conditions:
-            \[\hat\beta^{dropout} = \left(X^\top X - \frac{\phi}{1 - \phi}\diag(\|x_j\|^2)\right)^{-1}X^\top y\enspace.\]
+            \[\hat\beta^{dropout} = \left(X^\top X + \frac{\phi}{1 - \phi}\diag(\|x_j\|^2)\right)^{-1}X^\top y\enspace.\]
             Normalizing out data leads \textbf{in average} to the ridge estimator for $\lambda = \frac{\phi}{1 - \phi}$.
         \end{block}
 
