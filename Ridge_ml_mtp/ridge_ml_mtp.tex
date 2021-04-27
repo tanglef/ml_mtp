@@ -241,17 +241,18 @@ truc
 \end{frame}
 
 \begin{frame}{Ridge estimator}{An example of LOO CV and biais}
-    TO DO : change the data description
+    % TO DO : change the data description
     \begin{onlyenv}<1>
         \begin{columns}
             \begin{column}{0.4\textwidth}
                 \begin{itemize}
                     \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                     \item[]
-                    \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
+                    \item $n=50$, $p=10$
                     \item[]
-                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
-                    \item $\lambda_{opt} = \sigma^2p$
+                    \item \textcolor{red}{$SNR=1$}
+                    \item[]
+                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
             \end{column}
             \begin{column}{0.7\textwidth}
@@ -267,10 +268,11 @@ truc
                 \begin{itemize}
                     \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                     \item[]
-                    \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
+                    \item $n=50$, $p=10$
                     \item[]
-                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
-                    \item $\lambda_{opt} = \sigma^2p$
+                    \item \textcolor{red}{$SNR=2$}
+                    \item[]
+                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
             \end{column}
             \begin{column}{0.7\textwidth}
@@ -286,10 +288,11 @@ truc
                 \begin{itemize}
                     \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                     \item[]
-                    \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
+                    \item $n=50$, $p=10$
                     \item[]
-                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
-                    \item $\lambda_{opt} = \sigma^2p$
+                    \item \textcolor{red}{$SNR=3$}
+                    \item[]
+                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
             \end{column}
             \begin{column}{0.7\textwidth}
@@ -305,10 +308,11 @@ truc
                 \begin{itemize}
                     \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                     \item[]
-                    \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
+                    \item $n=50$, $p=10$
                     \item[]
-                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
-                    \item $\lambda_{opt} = \sigma^2p$
+                    \item \textcolor{red}{$SNR=5$}
+                    \item[]
+                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
             \end{column}
             \begin{column}{0.7\textwidth}
@@ -318,16 +322,17 @@ truc
             \end{column}
             \end{columns}
     \end{onlyenv}
-    \begin{onlyenv}<6>
+    \begin{onlyenv}<5>
         \begin{columns}
             \begin{column}{0.4\textwidth}
                 \begin{itemize}
                     \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                     \item[]
-                    \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
+                    \item $n=50$, $p=10$
                     \item[]
-                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
-                    \item $\lambda_{opt} = \sigma^2p$
+                    \item \textcolor{red}{$SNR=7$}
+                    \item[]
+                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
             \end{column}
             \begin{column}{0.7\textwidth}
@@ -343,10 +348,11 @@ truc
                 \begin{itemize}
                     \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                     \item[]
-                    \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
+                    \item $n=50$, $p=10$
                     \item[]
-                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
-                    \item $\lambda_{opt} = \sigma^2p$
+                    \item \textcolor{red}{$SNR=10$}
+                    \item[]
+                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
             \end{column}
             \begin{column}{0.7\textwidth}
@@ -588,7 +594,7 @@ class MyModel(nn.Module):
 % double descent - example OLS fail
 %%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Double descent}{Example on samples number}
-    TODO : légende figure a changer
+    % TODO : légende figure a changer
     % Ordinary Least Square produce double descent phenomenon when train samples have the same size than the number of features.
     \begin{columns}
         \begin{column}{0.46\textwidth}
@@ -597,15 +603,15 @@ class MyModel(nn.Module):
                 \item[]
                 \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
                 \item[]
-                \item $SNR = 5$, \\
-                $\sigma = \frac{\sqrt{\beta^{*^\top}X^\top X \beta^{*}}}{\sqrt{n} SNR} $
+                \item $SNR = [1, 2, 3, 5, 7, 10]$ \\
+                % $\sigma = \frac{\sqrt{\beta^{*^\top}X^\top X \beta^{*}}}{\sqrt{n} SNR} $
                 \item[]
                 \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
             \end{itemize}
         \end{column}
         \begin{column}{0.7\textwidth}
             \begin{center}
-             \includegraphics[width=1\textwidth]{ols_fail_log.pdf}
+             \includegraphics[width=1\textwidth]{ols_fail_log_snr.pdf}
              \end{center}
         \end{column}
         \end{columns}
@@ -618,30 +624,39 @@ class MyModel(nn.Module):
 
 
 \begin{frame}{Double descent}{Example on features number}
-    TODO : légende figure a changer
+    % TODO : légende figure a changer
     % Ordinary Least Square produce double descent phenomenon when train samples have the same size than the number of features.
     \begin{columns}
         \begin{column}{0.46\textwidth}
             \begin{itemize}
-                \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
-                \item[]
-                \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
-                \item[]
-                \item $SNR = 5$, \\
-                $\sigma = \frac{\sqrt{\beta^{*^\top}X^\top X \beta^{*}}}{\sqrt{n} SNR} $
-                \item[]
-                \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
+                \item To generate data :
+                \begin{itemize}
+                    \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
+                    %\item[]
+                    \item $n=p=100$,\\
+                    $\|\beta^*\|_2=1$
+                    %\item[]
+                    \item $SNR = [1, 2, 3, 5, 7, 10]$, \\
+                    % $\sigma = \frac{\sqrt{\beta^{*^\top}X^\top X \beta^{*}}}{\sqrt{n} SNR} $
+                    %\item[]
+                    \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
+                \end{itemize}
+                \item To learn model :
+                \begin{itemize}
+                    \item if $p\leq n$, use $X$ from data ;
+                    \item if $p > n$, merge columns to $X$ from random distribution.
+                \end{itemize}
             \end{itemize}
         \end{column}
         \begin{column}{0.7\textwidth}
             \begin{center}
-             \includegraphics[width=1\textwidth]{ols_fail_log_features.pdf}
+             \includegraphics[width=1\textwidth]{ols_fail_log_snr_features.pdf}
              \end{center}
         \end{column}
         \end{columns}
     %\begin{onlyenv}<2>
         \begin{block}{}
-            Ordinary Least Square produce double descent phenomenon when training set has same size as the number of features.
+            Ordinary Least Square produce double descent phenomenon when the number of features of the model has same size than the number of samples.
         \end{block}
     %\end{onlyenv}
 \end{frame}
