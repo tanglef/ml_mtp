@@ -81,8 +81,9 @@ def double_descent(n_max, p, sigma):
             label=f"{label[idx]:.1e} ridgeopt",
             linestyle='-.', alpha=0.75)
 
-    plt.xlabel('n samples')
+    plt.xlabel('Num Samples')
     plt.ylabel('MSE test')
+    plt.title(r'Test Risk for $\ell_2$ Regularized Regression')
     plt.legend()
     plt.ylim((0, 1.6))
     plt.tight_layout()
