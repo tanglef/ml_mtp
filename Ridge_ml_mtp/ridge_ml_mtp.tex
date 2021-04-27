@@ -216,7 +216,7 @@
     Let us denote :
     \begin{itemize}
         \item $\hat \beta_\lambda^{(-i)}$ the estimated coefficients without using the pair $(x_i, y_i)$.
-        \item $R^\lambda =  X(X^\top X + \lambda \mathrm{Id})X^\top$ the Ridge operator matrix
+        \item $R^\lambda =  X(X^\top X + \lambda \mathrm{Id}^{-1})X^\top$ the Ridge operator matrix
     \end{itemize}
     \begin{onlyenv}<2>
         \begin{block}{Easy computation for LOO-CV}
@@ -406,20 +406,23 @@
 Suppose $y_i=\varphi(X_i)$, then
  $\hat\varphi = \displaystyle\argmin_{\varphi\in\mathcal{H}} \|y-\varphi(X)\|^2_2 + \lambda \|\varphi\|_\mathcal{H}\enspace.$
  \begin{block}{Representer theorem\footnote[frame]{\citet{scholkopf2001generalized}}}
-        For $\mathcal{H}$ RKHS of kernel $K$ (symmetric!),
+        Take $\mathcal{H}$ RKHS of kernel $K$ of map $\Phi$ \emph{s.t.} $K(x, y)=\langle \Phi(x), \Phi(y)\rangle=(\Phi(x))(y)$.
+        For $f\in\mathcal{H}$, $f(x)=\langle f, \Phi(x)\rangle$. Then,
      \[\varphi = \sum_{i=1}^n \alpha_i K(x_i, \bullet)\enspace.\]
  \end{block}
  \pause
- The problem is now $\hat\alpha = \displaystyle\argmin_{\alpha} \|y-K\alpha\|^2_2 + \lambda \alpha^\top K \alpha$.
+ Denote $\mathbf{K}=(\mathbf{K}_{ij})_{ij}=(K(x_i, x_j))_{ij}$.
+ The problem is now \[\hat\alpha = \displaystyle\argmin_{\alpha} \|y-\mathbf{K}\alpha\|^2_2 + \lambda \alpha^\top \mathbf{K} \alpha.\]
+ \vspace{-.5cm}
  \begin{itemize}
-     \item first order conditions: $\nabla=(KK + \lambda K)\hat\alpha - Ky = 0$,
-     \item solution: \[\textcolor{red}{\hat\alpha = (K+\lambda\mathrm{Id})^{-1}y} \enspace.\]
+     \item first order conditions: $\nabla=(\mathbf{K}\mathbf{K} + \lambda \mathbf{K})\hat\alpha - \mathbf{K}y = 0$,
+     \item solution: \[\textcolor{red}{\hat\alpha = (\mathbf{K}+\lambda\mathrm{Id})^{-1}y} \enspace.\]
  \end{itemize}
 \end{frame}
 
 
 \begin{frame}{Kernel ridge regression}{Example with \texttt{KeOps} package}
-    Gaussian kernel to estimate $\varphi(t) = t + t\cos(6t)$ on noised data,
+    Gaussian kernel to estimate $\varphi(t) = t + t\cos(6t)$ on noised data ($\sigma=0.8$),
 \[K(x,y)=\exp\left\{-\gamma\|x - y\|^2_2\right\}, \gamma=\frac{1}{2\cdot 0.2^2} \enspace.\]
 \begin{figure}
     \centering
@@ -533,7 +536,7 @@ Suppose $y_i=\varphi(X_i)$, then
 
     Note that $\bbE[I_{ij}] = 0\phi + \frac{1}{1-\phi} (1-\phi) = 1$, thus:
 
-    \[\bbE\left[\frac{\partial}{\partial \beta}\right] = XX^\top\beta - X^\top y + \frac{\phi}{1 - \phi}\mathrm{diag}(\|x_j\|^2)_{j=1}^p\beta\enspace, \]
+    \[\bbE\left[\frac{\partial L(\beta)}{\partial \beta}\right] = XX^\top\beta - X^\top y + \frac{\phi}{1 - \phi}\mathrm{diag}(\|x_j\|^2)_{j=1}^p\beta\enspace, \]
 
     \begin{onlyenv}<2->
         \begin{block}{Link with ridge}
@@ -575,8 +578,8 @@ class MyModel(nn.Module):
     \begin{figure}
         \centering
         \includegraphics[scale=.5]{dropout.pdf}
-        \caption{Coefficients of $\beta$ for the ridge and dropout method with $n=80, p=30$ and ridge penalty $\lambda=\phi / (1 - \phi)=1$}
     \end{figure}
+    Coefficients of $\beta$ for the ridge and dropout method with $n=80, p=30$ and ridge penalty $\lambda=\phi / (1 - \phi)=1$ are close.
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -784,7 +787,7 @@ The Ridge regularization is linked to several modern techniques, sometimes hidde
 \begin{itemize}
     \item LASSO methods are powerful, but \textcolor{red}{SO ARE RIDGE'S},
     \item it is easy to implement,
-    \item has computational speed-ups from theoretical results, and
+    \item has computational speed-ups from theoretical results.
 \end{itemize}
 \medskip
     \begin{block}{One or the other?}<2->
@@ -798,7 +801,7 @@ The Ridge regularization is linked to several modern techniques, sometimes hidde
 %%%%%%%%%%%%%%%%%
 
 \begin{frame}{References}
-    \small
+    \footnotesize
     \bibliography{../sty/references.bib}
 \end{frame}
 
