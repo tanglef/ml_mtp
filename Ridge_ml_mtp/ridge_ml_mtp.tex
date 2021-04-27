@@ -539,7 +539,7 @@ Suppose $y_i=\varphi(X_i)$, then
         \begin{block}{Link with ridge}
             Solving first order conditions:
             \[\hat\beta^{dropout} = \left(X^\top X - \frac{\phi}{1 - \phi}\diag(\|x_j\|^2)\right)^{-1}X^\top y\enspace.\]
-            Normalizing out data leads \textbf{in average} to the ridge estimator for $\lambda=\phi / (1 - \phi)$.
+            Normalizing our data leads \textbf{in average} to the ridge estimator for $\lambda=\phi / (1 - \phi)$.
         \end{block}
 
     \end{onlyenv}
@@ -598,7 +598,7 @@ class MyModel(nn.Module):
         \end{figure}
     \begin{itemize}
         \item interpolate the data $\Longrightarrow$ $\ell_2$ norm of $\hat\beta$ is high,
-        \item smaller $\ell_2$ norm for $\hat\beta$ generalize better and we keep zero training error.
+        \item smaller $\ell_2$ norm for $\hat\beta$ generalizes better and we keep zero training error.
     \end{itemize}
     \end{onlyenv}
 \end{frame}
@@ -616,8 +616,6 @@ class MyModel(nn.Module):
                 \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                 \item[]
                 \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
-                \item[]
-                \item $\SNR = [1, 2, 3, 5, 7, 10]$ \\
                 % $\sigma = \frac{\sqrt{\beta^{*^\top}X^\top X \beta^{*}}}{\sqrt{n} SNR} $
                 \item[]
                 \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
@@ -631,7 +629,7 @@ class MyModel(nn.Module):
         \end{columns}
     %\begin{onlyenv}<2>
         \begin{block}{}
-            Ordinary Least Square produce double descent phenomenon when training set has same size as the number of features.
+            Ordinary Least Square produces a double descent phenomenon when training set has same size as the number of features.
         \end{block}
     %\end{onlyenv}
 \end{frame}
@@ -650,7 +648,6 @@ class MyModel(nn.Module):
                     \item $n=p=100$,
                     $\|\beta^*\|_2=1$
                     %\item[]
-                    \item $\SNR = [1, 2, 3, 5, 7, 10]$, \\
                     % $\sigma = \frac{\sqrt{\beta^{*^\top}X^\top X \beta^{*}}}{\sqrt{n} SNR} $
                     %\item[]
                     \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
@@ -670,7 +667,7 @@ class MyModel(nn.Module):
         \end{columns}
     %\begin{onlyenv}<2>
         \begin{block}{}
-            Ordinary Least Square produce double descent phenomenon when the number of features of the model has same size than the number of samples.
+            Ordinary Least Square produces a double descent phenomenon when the number of features is the same as the number of samples.
         \end{block}
     %\end{onlyenv}
 \end{frame}
@@ -739,12 +736,12 @@ class MyModel(nn.Module):
     $$\min_{M} \|X-M\|_F^2 \quad \text{s. t.} \quad  rank(M) \leq q$$.
     \begin{onlyenv}<2->
     \begin{itemize}
-        \item Solution : set all the singular values of $D$ to zero, except the $q$ larger.
+        \item Solution : set all the singular values of $D$ to zero, except the $q$ largest.
         \item Problem : the rank constraint makes this problem non-convex
     \end{itemize}
     \end{onlyenv}
     \begin{onlyenv}<3->
-        \begin{block}{Convex relaxation \footnote[frame]{\citet{Fazel02}}- LASSO version of rank selection matrix}
+        \begin{block}{Convex relaxation \only<3->\footnote[frame]{\citet{Fazel02}}- LASSO version of rank selection matrix}
             $$\widetilde{M} = \argmin_{M} \|X-M\|_F^2 + \lambda \|M\|_*$$
             \begin{center}
                 with $\|M\|_*$ denoting the nuclear norm - sum of singular values.
@@ -764,7 +761,7 @@ class MyModel(nn.Module):
         \begin{itemize}
             \item This is a $\ell_2$ bi-convex problem.
             % \item This problem as  the same solution that the $\ell_1$ convex relation problem  :
-            \item The solution is the same that  the $\ell_1$ convex relation problem  :
+            \item The solution is the same as the $\ell_1$ convex relation problem  :
             $ \widetilde{A} \widetilde{B}^\top = \widetilde{M} $
         \end{itemize}
     \end{onlyenv}
@@ -786,7 +783,7 @@ class MyModel(nn.Module):
 % Biblio
 %%%%%%%%%%%%%%%%%
 
-\begin{frame}[allowframebreaks]
+\begin{frame}{References}
     \small
     \bibliography{../sty/references.bib}
 \end{frame}
