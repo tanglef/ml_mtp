@@ -11,6 +11,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{csquotes}
 \usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{copyrightbox}
 
 \usepackage[scaled]{beramono}
 \usepackage[scale=1.05]{AlegreyaSans}
@@ -156,12 +157,21 @@
         \begin{block}{Some cons (because there must be some)}
             \begin{itemize}
         \item<2-> Alone won't give sparse solutions, $\dots$
-        \item<2-> \textbf{BUT} can be combined with a LASSO\footnote[frame]{\citet{Tibshirani96}} which gives the Elastic-Net \footnote[frame]{\citet{Zou_Hastie05}}:
+        \item<2-> \textbf{BUT} can be combined with a LASSO\only<2->\footnote[frame]{\citet{Tibshirani96}} which gives the Elastic-Net \only<2->\footnote[frame]{\citet{Zou_Hastie05}}:
         \[\argmin_\beta \|y-X\beta\|_2^2 + \lambda_1 \|\beta\|_1 + \lambda_2 \|\beta\|_2^2\enspace.\]
         \item<2-> Introduce an hyperparameter that needs tuning.
             \end{itemize}
         \end{block}
     \end{onlyenv}
+\end{frame}
+
+\begin{frame}{Different penalties}{And different shapes}
+    \begin{figure}
+        \centering
+        \copyrightbox[b]{\includegraphics[scale=.4]{balls_reg.png}
+        }%
+           {Source: \url{https://towardsdatascience.com/}}
+    \end{figure}
 
 \end{frame}
 
@@ -776,7 +786,8 @@ class MyModel(nn.Module):
 % Biblio
 %%%%%%%%%%%%%%%%%
 
-\begin{frame}
+\begin{frame}[allowframebreaks]
+    \small
     \bibliography{../sty/references.bib}
 \end{frame}
 
