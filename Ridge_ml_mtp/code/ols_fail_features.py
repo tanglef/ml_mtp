@@ -79,27 +79,30 @@ def make_curve(n_train, n_test, p_train_, p, snr):
     return train_errors, test_errors
 
 
-def double_descent(n_train, n_test, p, snr):
+def double_descent(n_train, n_test, p, snr_):
     q = int(p*(p+1)/2)
-    p_train_ = np.linspace(2, (p+q)//2, num=(p+q)//2-2, dtype=int)
-    # print(p_train_)
-    # return
-    train_err, test_err = make_curve(n_train, n_test, p_train_, p, snr)
-    all_train = train_err
-    all_test = test_err
+    p_train_ = np.linspace(2, (p+q)//10, num=(p+q)//20-2, dtype=int)
+
 
     plt.figure()
-    plt.plot(p_train_, all_test, label='OLS')
-    plt.xlabel('n features')
+    for snr in snr_:
+        train_err, test_err = make_curve(n_train, n_test, p_train_, p, snr)
+        all_train = train_err
+        all_test = test_err
+        plt.plot(p_train_ / n_train, all_test, label='OLS - SNR ='+str(snr))
+
+
+    plt.xlabel('n_features / n_train')
     plt.ylabel('MSE test log-scaled')
     plt.yscale('log')
     plt.legend()
     plt.tight_layout()
+    # plt.ylim(0, 3)
     if save_fig:
         plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
-                                 "ols_fail_log_features.pdf"))
+                                 "ols_fail_log_snr_features.pdf"))
     plt.show()
 
 
 if __name__ == '__main__':
-    double_descent(50, 100, 50, 5)
+    double_descent(100, 100, 100, np.array([1, 2, 3, 5, 7, 10]))
