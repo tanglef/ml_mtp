@@ -111,26 +111,7 @@
     \tableofcontents
 \end{frame}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%% Introduction %%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section*{Introduction}
-\begin{frame}{Introduction}{Ridge regularization}
-truc
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%
-% Presentation - Linear Model
-%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Linear model}
-
-\begin{frame}{Linear Regression}{Why use it?}
-    Argument à ajouter en faveur du modèle linéaire (slide peut-être inutile)
-    TODO : add argument en faveur du modèle linéaire
-\end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%
 % Presentation - OLS problem
@@ -159,6 +140,29 @@ truc
         \[ \hat\beta_{ridge} = \argmin_{\beta} \|y-X\beta\|_2^2 \textcolor{red}{+ \lambda \|\beta\|^2_2} \Longleftrightarrow \hat \beta = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y \]
     \end{block}
     \end{onlyenv}
+\end{frame}
+
+
+\begin{frame}{Ridge regularization}{Some generalities}
+    \begin{onlyenv}<1->
+    \begin{itemize}
+        \item<1-> Coefficients with smaller $\ell_2$ norm,
+        \item<1-> Handles the multicolinearity issue,
+        \item<1-> Don't apply only to linear models, in general:
+        \[\argmin_w f(w) + \lambda \|w\|^2_2 \enspace.\]
+    \end{itemize}
+\end{onlyenv}
+\begin{onlyenv}<2->
+        \begin{block}{Some cons (because there must be some)}
+            \begin{itemize}
+        \item<2-> Alone won't give sparse solutions, $\dots$
+        \item<2-> \textbf{BUT} can be combined with a LASSO which gives the Elastic-Net:
+        \[\argmin_\beta \|y-X\beta\|_2^2 + \lambda_1 \|\beta\|_1 + \lambda_2 \|\beta\|_2^2\enspace.\]
+        \item<2-> Introduce an hyperparameter that needs tuning.
+            \end{itemize}
+        \end{block}
+    \end{onlyenv}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -739,7 +743,7 @@ class MyModel(nn.Module):
     \end{onlyenv}
     \begin{onlyenv}<4->
         \begin{itemize}
-            \item Solution : soft-tresholded the singular values : $\max(d_i  -\lambda, 0)$
+            \item Solution : soft-tresholding the singular values: $\max(d_i  -\lambda, 0)$
         \end{itemize}
         \end{onlyenv}
 \end{frame}
@@ -757,7 +761,7 @@ class MyModel(nn.Module):
         \begin{block}{Interest in variation of theses  problems}
             If $X$ has missing-values, we can solve the \textit{matrix completion} objective :
             $$\widetilde{M} = \argmin_{M} \|P_\Omega (X-M)\|_F^2 + \lambda \|M\|_*$$
-            \center{where $P_\Omega$ projects onto the observed values of $X$}
+            \center{where $P_\Omega$ projects onto the observed values of $X$.}
         \end{block}
         \begin{itemize}
             \item This problem can be solved for large $X$ using double ridge problem.
