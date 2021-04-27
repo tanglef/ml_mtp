@@ -433,7 +433,7 @@ Suppose $y_i=\varphi(X_i)$, then
 %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Data augmentation}
 
-\begin{frame}{Data augmentation}{With images}
+\begin{frame}{Data augmentation\footnote[frame]{\citet{chollet2018deep}}}{With images}
     \begin{center}
         Example of a small dog from CIFAR10 dataset
     \end{center}
@@ -504,7 +504,7 @@ Suppose $y_i=\varphi(X_i)$, then
 % Dropout
 %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Dropout regularization}
-\begin{frame}{Dropout}{Randomized drop}
+\begin{frame}{Dropout \footnote[frame]{\citet{srivastava2014dropout}}}{Randomized drop}
     \begin{itemize}
         \item Randomly set units of a layer to $0$ with probability $\phi$ to avoid overfitting,
         \item Inflate surviving ones by $1/(1-\phi)$ factor as compensation.
@@ -526,7 +526,7 @@ Suppose $y_i=\varphi(X_i)$, then
 \end{frame}
 
 
-\begin{frame}{Dropout}{Linear regression and Ridge}
+\begin{frame}{Dropout}{Linear regression and Ridge  \footnote[frame]{\citet{wager2013dropout}}}
     Denoting $(I_{ij})_{ij}$ the dropout mask on $X=(x_{ij})_{ij}$ then cost function is:
 
     \[L(\beta) = \frac{1}{2}\sum_{i=1}^n\left(y_i - \sum_{j=1}^p x_{ij}I_{ij}\beta_j\right)^2\enspace.\]
@@ -539,7 +539,7 @@ Suppose $y_i=\varphi(X_i)$, then
         \begin{block}{Link with ridge}
             Solving first order conditions:
             \[\hat\beta^{dropout} = \left(X^\top X - \frac{\phi}{1 - \phi}\diag(\|x_j\|^2)\right)^{-1}X^\top y\enspace.\]
-            Normalizing out data leads \textbf{in average} to the ridge estimator for $\lambda=\phi / (1 - \phi)$.
+            Normalizing out data leads \textbf{in average} to the ridge estimator for $\lambda = \frac{\phi}{1 - \phi}$.
         \end{block}
 
     \end{onlyenv}
@@ -775,7 +775,7 @@ class MyModel(nn.Module):
             \center{where $P_\Omega$ projects onto the observed values of $X$.}
         \end{block}
         \begin{itemize}
-            \item This problem can be solved for large $X$ using double ridge problem.
+            \item This problem can be solved for large $X$ using double ridge problem\footnote[frame]{\citet{hastie2015matrix}}.
         \end{itemize}
     \end{onlyenv}
 \end{frame}
@@ -786,7 +786,7 @@ class MyModel(nn.Module):
 % Biblio
 %%%%%%%%%%%%%%%%%
 
-\begin{frame}[allowframebreaks]
+\begin{frame}[allowframebreaks,noframenumbering]
     \small
     \bibliography{../sty/references.bib}
 \end{frame}
