@@ -87,4 +87,4 @@ def double_descent(n_max, p, snr_):
 
 
 if __name__ == '__main__':
-    double_descent(1000, 200, 8)
+    double_descent(1000, 200, np.array([1, 2, 3, 5, 7, 10]))
