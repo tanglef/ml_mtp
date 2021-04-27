@@ -405,7 +405,7 @@
 \begin{frame}{Kernel ridge regression}{Non linear relation}
 Suppose $y_i=\varphi(X_i)$, then
  $\hat\varphi = \displaystyle\argmin_{\varphi\in\mathcal{H}} \|y-\varphi(X)\|^2_2 + \lambda \|\varphi\|_\mathcal{H}\enspace.$
- \begin{block}{Representer theorem}
+ \begin{block}{Representer theorem\footnote[frame]{\citet{scholkopf2001generalized}}}
         For $\mathcal{H}$ RKHS of kernel $K$ (symmetric!),
      \[\varphi = \sum_{i=1}^n \alpha_i K(x_i, \bullet)\enspace.\]
  \end{block}
@@ -777,6 +777,20 @@ class MyModel(nn.Module):
     \end{onlyenv}
 \end{frame}
 
+
+\begin{frame}{Conclusion}
+The Ridge regularization is linked to several modern techniques, sometimes hidden behind them.
+
+\begin{itemize}
+    \item LASSO methods are powerful, but \textcolor{red}{SO ARE RIDGE'S},
+    \item it is easy to implement,
+    \item has computational speed-ups from theoretical results, and
+\end{itemize}
+\medskip
+    \begin{block}{One or the other?}<2->
+    The best of both worlds can be used with Elastic-Net regularization.
+    \end{block}
+\end{frame}
 
 
 %%%%%%%%%%%%%%%%%
