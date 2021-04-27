@@ -92,8 +92,9 @@ def double_descent(n_train, n_test, p, snr_):
         plt.plot(p_train_ / n_train, all_test, label='OLS - SNR ='+str(snr))
 
 
-    plt.xlabel('n_features / n_train')
+    plt.xlabel('Num Features / Num Samples Train')
     plt.ylabel('MSE test log-scaled')
+    plt.title('Test Risk for OLS')
     plt.yscale('log')
     plt.legend()
     plt.tight_layout()

@@ -75,9 +75,10 @@ def double_descent(n_max, p, snr_):
         plt.plot(n_samples, all_test, label='OLS - SNR ='+str(snr))
 
 
-    plt.xlabel('n samples')
+    plt.xlabel('Num Samples')
     plt.ylabel('MSE test log-scaled')
     plt.yscale('log')
+    plt.title('Test Risk for OLS')
     plt.legend()
     plt.tight_layout()
     if save_fig:
