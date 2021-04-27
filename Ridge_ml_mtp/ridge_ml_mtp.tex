@@ -250,7 +250,7 @@ truc
                     \item[]
                     \item $n=50$, $p=10$
                     \item[]
-                    \item \textcolor{red}{$SNR=1$}
+                    \item \textcolor{red}{$\SNR=1$}
                     \item[]
                     \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
@@ -270,7 +270,7 @@ truc
                     \item[]
                     \item $n=50$, $p=10$
                     \item[]
-                    \item \textcolor{red}{$SNR=2$}
+                    \item \textcolor{red}{$\SNR=2$}
                     \item[]
                     \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
@@ -290,7 +290,7 @@ truc
                     \item[]
                     \item $n=50$, $p=10$
                     \item[]
-                    \item \textcolor{red}{$SNR=3$}
+                    \item \textcolor{red}{$\SNR=3$}
                     \item[]
                     \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
@@ -310,7 +310,7 @@ truc
                     \item[]
                     \item $n=50$, $p=10$
                     \item[]
-                    \item \textcolor{red}{$SNR=5$}
+                    \item \textcolor{red}{$\SNR=5$}
                     \item[]
                     \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
@@ -330,7 +330,7 @@ truc
                     \item[]
                     \item $n=50$, $p=10$
                     \item[]
-                    \item \textcolor{red}{$SNR=7$}
+                    \item \textcolor{red}{$\SNR=7$}
                     \item[]
                     \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
@@ -350,7 +350,7 @@ truc
                     \item[]
                     \item $n=50$, $p=10$
                     \item[]
-                    \item \textcolor{red}{$SNR=10$}
+                    \item \textcolor{red}{$\SNR=10$}
                     \item[]
                     \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$
                 \end{itemize}
@@ -603,7 +603,7 @@ class MyModel(nn.Module):
                 \item[]
                 \item $n=1000$, $p=200$, $\|\beta^*\|_2=1$
                 \item[]
-                \item $SNR = [1, 2, 3, 5, 7, 10]$ \\
+                \item $\SNR = [1, 2, 3, 5, 7, 10]$ \\
                 % $\sigma = \frac{\sqrt{\beta^{*^\top}X^\top X \beta^{*}}}{\sqrt{n} SNR} $
                 \item[]
                 \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
@@ -633,10 +633,10 @@ class MyModel(nn.Module):
                 \begin{itemize}
                     \item Isotropic data: $X\sim\mathcal{N}(0,\mathrm{Id})$,
                     %\item[]
-                    \item $n=p=100$,\\
+                    \item $n=p=100$,
                     $\|\beta^*\|_2=1$
                     %\item[]
-                    \item $SNR = [1, 2, 3, 5, 7, 10]$, \\
+                    \item $\SNR = [1, 2, 3, 5, 7, 10]$, \\
                     % $\sigma = \frac{\sqrt{\beta^{*^\top}X^\top X \beta^{*}}}{\sqrt{n} SNR} $
                     %\item[]
                     \item $y = X\beta^*+\varepsilon$ with $\varepsilon\sim \mathcal{N}(0, \sigma^2\mathrm{Id})$,
@@ -774,6 +774,5 @@ class MyModel(nn.Module):
 \begin{frame}
     \bibliography{../sty/references.bib}
 \end{frame}
-
 
 \end{document}
