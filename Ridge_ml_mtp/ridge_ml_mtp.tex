@@ -116,7 +116,7 @@
 %%%%%%%%%%%%%%%%%%%%%%
 % Presentation - OLS problem
 %%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Ridge regularization}{Why use it?}
+\begin{frame}{Ridge \footnote[frame]{\citet{Tikhonov43,Hoerl_Kennard70}} regularization}{Why use it?}
     Ordinary least squares:
     \[\hat\beta = \argmin_{\beta} \|y-X\beta\|_2^2 \Longleftrightarrow \hat \beta = (X^\top X)^{-1}X^\top y\]
 
@@ -156,7 +156,7 @@
         \begin{block}{Some cons (because there must be some)}
             \begin{itemize}
         \item<2-> Alone won't give sparse solutions, $\dots$
-        \item<2-> \textbf{BUT} can be combined with a LASSO which gives the Elastic-Net:
+        \item<2-> \textbf{BUT} can be combined with a LASSO\footnote[frame]{\citet{Tibshirani96}} which gives the Elastic-Net \footnote[frame]{\citet{Zou_Hastie05}}:
         \[\argmin_\beta \|y-X\beta\|_2^2 + \lambda_1 \|\beta\|_1 + \lambda_2 \|\beta\|_2^2\enspace.\]
         \item<2-> Introduce an hyperparameter that needs tuning.
             \end{itemize}
@@ -734,7 +734,7 @@ class MyModel(nn.Module):
     \end{itemize}
     \end{onlyenv}
     \begin{onlyenv}<3->
-        \begin{block}{Convex relaxation - LASSO version of rank selection matrix}
+        \begin{block}{Convex relaxation \footnote[frame]{\citet{Fazel02}}- LASSO version of rank selection matrix}
             $$\widetilde{M} = \argmin_{M} \|X-M\|_F^2 + \lambda \|M\|_*$$
             \begin{center}
                 with $\|M\|_*$ denoting the nuclear norm - sum of singular values.
@@ -747,14 +747,15 @@ class MyModel(nn.Module):
         \end{itemize}
         \end{onlyenv}
 \end{frame}
-\begin{frame}{Double Ridge Problem}{}
+\begin{frame}{Double Ridge Problem \footnote[frame]{\citet{srebro2005maximum}}}{}
     Let $X \in \mathbb{R}^{m\times n },~  A \in \mathbb{R}^{m\times q}$ and $B \in \mathbb{R}^{n \times q }$. We get the double ridge problem :
     $$ \widetilde{A}, \widetilde{B} =  \argmin_{A, B} \|X-AB^\top \|_F^2 + \lambda \|A \|_F^2 +\lambda \|B \|_F^2 $$
     \begin{onlyenv}<2->
         \begin{itemize}
             \item This is a $\ell_2$ bi-convex problem.
-            \item This problem as  the same solution that the $\ell_1$ convex relation problem  :
-            $$ \widetilde{A} \widetilde{B}^\top = \widetilde{M} $$
+            % \item This problem as  the same solution that the $\ell_1$ convex relation problem  :
+            \item The solution is the same that  the $\ell_1$ convex relation problem  :
+            $ \widetilde{A} \widetilde{B}^\top = \widetilde{M} $
         \end{itemize}
     \end{onlyenv}
     \begin{onlyenv}<2->
