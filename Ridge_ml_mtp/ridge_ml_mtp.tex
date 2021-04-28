@@ -194,7 +194,7 @@
         %\begin{align*}
         $$    \hat \beta_{\lambda} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y
             = V(D^\top D \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}D^\top U^\top y
-            = \sum_{i=1}^{rg(X)} v_j \frac{d_j}{d_j^2 + \lambda} \langle u_j \vert y \rangle $$
+            = \sum_{j=1}^{rg(X)} v_j \frac{d_j}{d_j^2 + \lambda} \langle u_j \vert y \rangle $$
         % \end{align*}
         \end{block}
     \end{onlyenv}
@@ -205,7 +205,7 @@
         $$ \hat y_\lambda  = X \hat \beta_{\lambda} %= (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y
         %= U D V^\top V(D^\top D \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}D^\top U^\top y
         = U D (D^\top D \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}D^\top U^\top y
-        = \sum_{i=1}^{rg(X)} u_j \frac{d_j^2}{d_j^2 + \lambda} \langle u_j \vert y \rangle $$
+        = \sum_{j=1}^{rg(X)} u_j \frac{d_j^2}{d_j^2 + \lambda} \langle u_j \vert y \rangle $$
         % \end{align*}
         \end{block}
     \end{onlyenv}
@@ -745,11 +745,11 @@ class MyModel(nn.Module):
 \section{Rank selection for matrix}
 \begin{frame}{Rank selection for matrix problem}{}
     Suppose $X \in \mathbb{R}^{m\times n }$. Then we get the rank selection for matrix problem :
-    $$\min_{M} \|X-M\|_F^2 \quad \text{s. t.} \quad  rank(M) \leq q$$.
+    $$\min_{M} \|X-M\|_F^2 \quad \text{s. t.} \quad  rank(M) \leq q .$$
     \begin{onlyenv}<2->
     \begin{itemize}
-        \item Solution : set all the singular values of $D$ to zero, except the $q$ largest.
-        \item Problem : the rank constraint makes this problem non-convex
+        \item Solution: set all the singular values of $D$ to zero, except the $q$ largest.
+        \item Problem: the rank constraint makes this problem non-convex
     \end{itemize}
     \end{onlyenv}
     \begin{onlyenv}<3->
@@ -762,7 +762,7 @@ class MyModel(nn.Module):
     \end{onlyenv}
     \begin{onlyenv}<4->
         \begin{itemize}
-            \item Solution : soft-tresholding the singular values: $\max(d_i  -\lambda, 0)$
+            \item Solution: soft-tresholding the singular values: $\max(d_i  -\lambda, 0)$
         \end{itemize}
         \end{onlyenv}
 \end{frame}
@@ -773,14 +773,14 @@ class MyModel(nn.Module):
         \begin{itemize}
             \item This is a $\ell_2$ bi-convex problem.
             % \item This problem as  the same solution that the $\ell_1$ convex relation problem  :
-            \item The solution is the same as the $\ell_1$ convex relation problem  :
+            \item The solution is the same as the $\ell_1$ convex relation problem:
             $ \widetilde{A} \widetilde{B}^\top = \widetilde{M} $
         \end{itemize}
     \end{onlyenv}
     \begin{onlyenv}<2->
         \begin{block}{Interest of this property -  when SVD fail}
             If $X$ is massive and sparse, usefull to compute a low-rank matrix approximation by alternating ridge regression. \\
-            Given $A$, we get $B$ by :
+            Given $A$, we get $B$ by:
             $$ B^\top = \left (A^\top A + \frac{\lambda}{2}\mathrm{Id}_q \right )A^\top X$$
             % If $X$ has missing-values, we can solve the \textit{matrix completion} objective :
             % $$\widetilde{M} = \argmin_{M} \|P_\Omega (X-M)\|_F^2 + \lambda \|M\|_*$$
@@ -805,6 +805,9 @@ The Ridge regularization is linked to several modern techniques, sometimes hidde
     \begin{block}{One or the other?}<2->
     The best of both worlds can be used with Elastic-Net regularization.
     \end{block}
+    \begin{center}
+        \url{https://github.com/tanglef/ml_mtp}
+    \end{center}
 \end{frame}
 
 
