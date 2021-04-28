@@ -118,8 +118,9 @@
 % Presentation - OLS problem
 %%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}{Ridge \footnote[frame]{\citet{Tikhonov43,Hoerl_Kennard70}} regularization}{Why use it?}
+    We denote $X \in \bbR^{n \times p}, y \in \bbR^n$ and $\beta \in \bbR^p$ and we search the best $\beta$ such that : $$y \approx X \beta,$$ \\
     Ordinary least squares:
-    \[\hat\beta = \argmin_{\beta} \|y-X\beta\|_2^2 \Longleftrightarrow \hat \beta = (X^\top X)^{-1}X^\top y\]
+    \[\hat\beta = \argmin_{\beta} \|y-X\beta\|_2^2 \Longleftrightarrow \hat \beta = (X^\top X)^{-1}X^\top y, \]
 
     Problems that can happen:
     \begin{itemize}
@@ -138,7 +139,7 @@
     \end{itemize}
     \begin{onlyenv}<3->
     \begin{block}{Ridge estimator}
-        \[ \hat\beta_{ridge} = \argmin_{\beta} \|y-X\beta\|_2^2 \textcolor{red}{+ \lambda \|\beta\|^2_2} \Longleftrightarrow \hat \beta_{ridge} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y \]
+        \[ \hat\beta_{ridge} = \argmin_{\beta} \|y-X\beta\|_2^2 \textcolor{red}{+ \lambda \|\beta\|^2_2} \Longleftrightarrow \hat \beta_{ridge} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y. \]
     \end{block}
     \end{onlyenv}
 \end{frame}
@@ -229,13 +230,13 @@
         \begin{block}{Easy computation for LOO-CV}
         $$ LOO_\lambda
             = \sum_{i=1}^n (y_i - x_i^\top \hat \beta_\lambda^{(-i)} )^2
-            = \sum_{i=1}^n \frac{(y_i - x_i^\top \hat \beta_\lambda)^2}{(1 - R^\lambda_{ii})^2} $$
+            = \sum_{i=1}^n \frac{(y_i - x_i^\top \hat \beta_\lambda)^2}{(1 - R^\lambda_{ii})^2}, $$
 
         $$ R^\lambda
         =  X(X^\top X + \lambda \mathrm{Id})^{-1}X^\top
         = UD(D^\top D + \lambda \mathrm{Id})^{-1} D^\top U
-        = U S(\lambda) U$$
-        \center{with $S(\lambda)$ the diagonal shrinkage matrix with elements $\frac{d_j^2}{d_j^2 + \lambda}$}
+        = U S(\lambda) U.$$
+        \center{with $S(\lambda)$ the diagonal shrinkage matrix with elements $\frac{d_j^2}{d_j^2 + \lambda}$.}
         \end{block}
     \end{onlyenv}
 \end{frame}
@@ -246,12 +247,20 @@
     $$ y_i = x_i^\top \beta + \varepsilon_i, \quad i=1, \dots, n$$
     Then, the Ridge estimate $\hat \beta_{\lambda}$ is a biased estimate of $\beta$.
     \begin{onlyenv}<2->
-        \begin{block}{Bias}
+        \begin{block}{Bias - Covariance matrix }
             If the $x_i$ are assumed fixed, $n > p$ and $X$ has full column rank, we get :
-            $$ \mathrm{Bias}(\hat \beta_\lambda) = \sum_{j=1}^p v_j \frac{\lambda}{d_j^2 + \lambda} \langle v_j \vert \beta \rangle $$
+            $$ \mathrm{Bias}(\hat \beta_\lambda) = \sum_{j=1}^p v_j \frac{\lambda}{d_j^2 + \lambda} \langle v_j \vert \beta \rangle, $$
+            $$ \mathrm{Var}(\hat \beta_\lambda) = \sigma^2 \sum_{j=1}^p  \frac{d_j^2}{(d_j^2 + \lambda)^2} v_j v_j^\top \quad \text{ with } \sigma^2 = \mathrm{Var}(\varepsilon_i).$$
         \end{block}
         The smaller the $j^{th}$ singular value is, the bigger the shrinkage associated is.
     \end{onlyenv}
+    % \begin{onlyenv}<3->
+    %     \begin{block}{Covariance matrix}
+    %         If the $x_i$ are assumed fixed, $n > p$ and $X$ has full column rank, we get :
+    %         $$ \mathrm{Var}(\hat \beta_\lambda) = \sigma^2 \sum_{j=1}^p  \frac{d_j^2}{(d_j^2 + \lambda)^2} v_j v_j^\top $$
+    %     \end{block}
+    %     The smaller the $j^{th}$ singular value is, the bigger the shrinkage associated is.
+    % \end{onlyenv}
 \end{frame}
 
 \begin{frame}{Ridge estimator}{An example of LOO CV and bias}
@@ -586,7 +595,7 @@ class MyModel(nn.Module):
 % Double descent
 %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Double descent}
-\begin{frame}{Double descent}{Over parametrization}
+\begin{frame}{Double descent with \citep{nakkiran2020optimal}}{Over parametrization}
     Phenomenon observed in Deep Learning, Random Forests \dots
     \begin{onlyenv}<1>
         \begin{figure}
@@ -610,7 +619,7 @@ class MyModel(nn.Module):
 %%%%%%%%%%%%%%%%%%%%%%%%
 % double descent - example OLS fail
 %%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Double descent}{Example on samples number - 25 repetitions}
+\begin{frame}{Double descent }{Example with samples \citep{nakkiran2020optimal} - 25 repetitions}
     % TODO : légende figure a changer
     % Ordinary Least Square produce double descent phenomenon when train samples have the same size than the number of features.
     \begin{columns}
@@ -638,7 +647,7 @@ class MyModel(nn.Module):
 \end{frame}
 
 
-\begin{frame}{Double descent}{Example on features number - 25 repetitions}
+\begin{frame}{Double descent}{Example with features \citep{nakkiran2020optimal} - 25 repetitions}
     % TODO : légende figure a changer
     % Ordinary Least Square produce double descent phenomenon when train samples have the same size than the number of features.
     \begin{columns}
@@ -769,14 +778,17 @@ class MyModel(nn.Module):
         \end{itemize}
     \end{onlyenv}
     \begin{onlyenv}<2->
-        \begin{block}{Interest in variation of theses  problems}
-            If $X$ has missing-values, we can solve the \textit{matrix completion} objective :
-            $$\widetilde{M} = \argmin_{M} \|P_\Omega (X-M)\|_F^2 + \lambda \|M\|_*$$
-            \center{where $P_\Omega$ projects onto the observed values of $X$.}
+        \begin{block}{Interest of this property -  when SVD fail}
+            If $X$ is massive and sparse, usefull to compute a low-rank matrix approximation by alternating ridge regression. \\
+            Given $A$, we get $B$ by :
+            $$ B^\top = \left (A^\top A + \frac{\lambda}{2}\mathrm{Id}_q \right )A^\top X$$
+            % If $X$ has missing-values, we can solve the \textit{matrix completion} objective :
+            % $$\widetilde{M} = \argmin_{M} \|P_\Omega (X-M)\|_F^2 + \lambda \|M\|_*$$
+            % \center{where $P_\Omega$ projects onto the observed values of $X$.}
         \end{block}
-        \begin{itemize}
-            \item This problem can be solved for large $X$ using double ridge problem\footnote[frame]{\citet{hastie2015matrix}}.
-        \end{itemize}
+        % \begin{itemize}
+        %     \item This problem can be solved for large $X$ using double ridge problem\footnote[frame]{\citet{hastie2015matrix}}.
+        % \end{itemize}
     \end{onlyenv}
 \end{frame}
 
