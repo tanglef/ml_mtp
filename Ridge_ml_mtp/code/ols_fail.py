@@ -72,10 +72,11 @@ def double_descent(n_max, p, snr_):
     for snr in snr_:
         train_err, test_err = make_curve(n_samples, n_max, p, snr)
         all_test = test_err
-        plt.plot(n_samples, all_test, label='OLS - SNR ='+str(snr))
+        plt.plot(n_samples/p, all_test, label='OLS - SNR ='+str(snr))
 
 
-    plt.xlabel('Num Samples')
+    # plt.xlabel('Num Samples')
+    plt.xlabel('Num Samples Train / Num Features')
     plt.ylabel('MSE test log-scaled')
     plt.yscale('log')
     plt.title('Test Risk for OLS')
@@ -83,7 +84,7 @@ def double_descent(n_max, p, snr_):
     plt.tight_layout()
     if save_fig:
         plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
-                                 "ols_fail_log_snr.pdf"))
+                                 "ols_fail_log_snr_f.pdf"))
     plt.show()
 
 

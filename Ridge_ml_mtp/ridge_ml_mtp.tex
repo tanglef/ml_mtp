@@ -138,7 +138,7 @@
     \end{itemize}
     \begin{onlyenv}<3->
     \begin{block}{Ridge estimator}
-        \[ \hat\beta_{ridge} = \argmin_{\beta} \|y-X\beta\|_2^2 \textcolor{red}{+ \lambda \|\beta\|^2_2} \Longleftrightarrow \hat \beta = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y \]
+        \[ \hat\beta_{ridge} = \argmin_{\beta} \|y-X\beta\|_2^2 \textcolor{red}{+ \lambda \|\beta\|^2_2} \Longleftrightarrow \hat \beta_{ridge} = (X^\top X \textcolor{red}{+ \lambda \mathrm{Id}})^{-1}X^\top y \]
     \end{block}
     \end{onlyenv}
 \end{frame}
@@ -216,7 +216,7 @@
     Let us denote :
     \begin{itemize}
         \item $\hat \beta_\lambda^{(-i)}$ the estimated coefficients without using the pair $(x_i, y_i)$.
-        \item $R^\lambda =  X(X^\top X + \lambda \mathrm{Id}^{-1})X^\top$ the Ridge operator matrix
+        \item $R^\lambda =  X(X^\top X + \lambda \mathrm{Id})^{-1} X^\top$ the Ridge operator matrix
     \end{itemize}
     \begin{onlyenv}<2>
         \begin{block}{Easy computation for LOO-CV}
@@ -626,7 +626,7 @@ class MyModel(nn.Module):
         \end{column}
         \begin{column}{0.7\textwidth}
             \begin{center}
-             \includegraphics[width=1\textwidth]{ols_fail_log_snr.pdf}
+             \includegraphics[width=1\textwidth]{ols_fail_log_snr_f.pdf}
              \end{center}
         \end{column}
         \end{columns}
@@ -694,7 +694,7 @@ class MyModel(nn.Module):
         \end{column}
         \begin{column}{0.7\textwidth}
             \begin{center}
-             \includegraphics[width=1\textwidth]{double_descent.pdf}
+             \includegraphics[width=1\textwidth]{double_descent_f.pdf}
              \end{center}
         \end{column}
         \end{columns}
@@ -720,7 +720,7 @@ class MyModel(nn.Module):
         \end{column}
         \begin{column}{0.7\textwidth}
             \begin{center}
-             \includegraphics[width=1\textwidth]{double_descent_sup.pdf}
+             \includegraphics[width=1\textwidth]{double_descent_sup_f.pdf}
              \end{center}
         \end{column}
         \end{columns}

@@ -68,8 +68,9 @@ def double_descent(n_max, p, sigma):
 
     plt.figure()
     for idx in range(len(ridges)):
-        plt.plot(n_samples, all_test[idx], label=f"{label[idx]:.1e} ridgeopt")
-    plt.xlabel('Num Samples')
+        plt.plot(n_samples / p, all_test[idx], label=f"{label[idx]:.1e} ridgeopt")
+    # plt.xlabel('Num Samples')
+    plt.xlabel('Num Samples Train / Num Features')
     plt.ylabel('MSE test')
     plt.title(r'Test Risk for $\ell_2$ Regularized Regression')
     plt.legend()
@@ -77,7 +78,7 @@ def double_descent(n_max, p, sigma):
     plt.tight_layout()
     if save_fig:
         plt.savefig(os.path.join(path_file, "..", "prebuilt_images",
-                                 "double_descent.pdf"))
+                                 "double_descent_f.pdf"))
     plt.show()
 
 
