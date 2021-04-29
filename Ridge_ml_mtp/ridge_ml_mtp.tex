@@ -781,7 +781,7 @@ class MyModel(nn.Module):
         \begin{block}{Interest of this property -  when SVD fail}
             If $X$ is massive and sparse, usefull to compute a low-rank matrix approximation by alternating ridge regression. \\
             Given $A$, we get $B$ by:
-            $$ B^\top = \left (A^\top A + \frac{\lambda}{2}\mathrm{Id}_q \right )A^\top X$$
+            $$ B^\top = \left (A^\top A + \frac{\lambda}{2}\mathrm{Id}_q \right )^{-1}A^\top X$$
             % If $X$ has missing-values, we can solve the \textit{matrix completion} objective :
             % $$\widetilde{M} = \argmin_{M} \|P_\Omega (X-M)\|_F^2 + \lambda \|M\|_*$$
             % \center{where $P_\Omega$ projects onto the observed values of $X$.}
